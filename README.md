@@ -63,7 +63,7 @@
 
         var obj = skuTable.render({
             //上传占位图
-            skuIcon: 'https://shop.yyhjx.net/backend/assets/abec325a/img/sku-add.png',
+            skuIcon: './sku-add.png',
             //上传地址
             uploadUrl: '',
             //sku表格配置
