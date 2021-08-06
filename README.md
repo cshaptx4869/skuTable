@@ -18,6 +18,8 @@
 
 ## 示例
 
+> 注意：带 fairy* 的 class 属性值不可更改！
+
 ```html
 <!doctype html>
 <html lang="zh">
@@ -31,7 +33,7 @@
 <body>
 
 <div class="layui-container">
-    <form action="" class="layui-form">
+    <form action="" class="layui-form fairy-form">
         <!-- sku参数表 -->
         <div class="layui-form-item">
             <label class="layui-form-label">规格：</label>

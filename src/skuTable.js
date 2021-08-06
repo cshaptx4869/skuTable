@@ -61,6 +61,7 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
                     specData.push(specItem);
                 });
                 that.options.specData = specData;
+                that.options.skuData = $.extend(that.options.skuData, that.getFormSkuData());
                 that.renderSkuTable();
             });
 
@@ -226,6 +227,25 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
 
         getSpecData() {
             return this.options.specData;
+        }
+
+        getFormFilter() {
+            var fariyForm = $('form.fairy-form');
+            if (!fariyForm.attr('lay-filter')) {
+                fariyForm.attr('lay-filter', 'fairy-form-filter');
+            }
+            return fariyForm.attr('lay-filter');
+        }
+
+        getFormSkuData() {
+            var skuData = {};
+            $.each(form.val(this.getFormFilter()), function (key, value) {
+                if (key.startsWith('skus')) {
+                    skuData[key] = value;
+                }
+            });
+
+            return skuData;
         }
     }
 
