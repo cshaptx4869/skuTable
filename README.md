@@ -18,7 +18,7 @@
 
 ## 示例
 
-> 注意：带 fairy* 的 class 属性值不可更改！
+> 注意：带 fairy* 的 class 属性值固定写法不可更改！
 
 ```html
 <!doctype html>
@@ -68,11 +68,13 @@
         var form = layui.form, skuTable = layui.skuTable;
 
         var obj = skuTable.render({
+            //sku表相同属性值是否合并行
+            rowspan: false,
             //上传占位图
             skuIcon: './sku-add.png',
-            //上传地址
+            //上传地址。接口要求返回格式为 {"code": 200, "data": {"url": "xxx"}, "msg": ""}
             uploadUrl: '',
-            //sku表格配置
+            //sku表格配置参数
             skuTableConfig: {
                 thead: [
                     {title: '图片', icon: ''},

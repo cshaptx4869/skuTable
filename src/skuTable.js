@@ -13,7 +13,8 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
 
     class SkuTable {
         options = {
-            skuIcon: 'https://shop.yyhjx.net/backend/assets/abec325a/img/sku-add.png',
+            rowspan: true,
+            skuIcon: '',
             uploadUrl: '',
             specData: [],
             skuData: {},
@@ -69,10 +70,13 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
              * 监听批量赋值
              */
             $(document).on('click', '.fairy-sku-table thead tr th i', function () {
-                var that = this;
-                layer.prompt({title: $(that).parent().text().trim() + '批量赋值'}, function (value, index, elem) {
+                var thisI = this;
+                layer.prompt({title: $(thisI).parent().text().trim() + '批量赋值'}, function (value, index, elem) {
                     $.each($('.fairy-sku-table tbody tr'), function () {
-                        $(this).find('td').eq($(that).parent().index()).children('input').val(value);
+                        var index = that.options.rowspan ?
+                            $(thisI).parent().index() - ($('.fairy-sku-table thead th.fairy-spec-name').length - $(this).children('td.fairy-spec-value').length) :
+                            $(thisI).parent().index();
+                        $(this).find('td').eq(index).children('input').val(value);
                     });
                     layer.close(index);
                 });
@@ -134,7 +138,7 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
                     var theadTr = '<tr>';
 
                     theadTr += prependThead.map(function (t, i, a) {
-                        return '<th>' + t + '</th>';
+                        return '<th class="fairy-spec-name">' + t + '</th>';
                     }).join('');
 
                     this.options.skuTableConfig.thead.forEach(function (item) {
@@ -147,6 +151,18 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
                 }
                 table += '</thead>';
 
+                if (this.options.rowspan) {
+                    var skuRowspanArr = [];
+                    prependTbody.forEach(function (v, i, a) {
+                        var num = 1, index = i;
+                        while (index < a.length - 1) {
+                            num *= a[index + 1].length;
+                            index++;
+                        }
+                        skuRowspanArr.push(num);
+                    });
+                }
+
                 var prependTbodyTrs = [];
                 prependTbody.reduce(function (prev, cur, index, array) {
                     var tmp = [];
@@ -158,8 +174,19 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
                     return tmp;
                 }).forEach(function (item, index, array) {
                     var tr = '<tr>';
+
                     tr += item.title.split('-').map(function (t, i, a) {
-                        return '<td>' + t + '</td>';
+                        if (that.options.rowspan) {
+                            if (index % skuRowspanArr[i] === 0 && skuRowspanArr[i] > 1) {
+                                return '<td class="fairy-spec-value" rowspan="' + skuRowspanArr[i] + '">' + t + '</td>';
+                            } else if (skuRowspanArr[i] === 1) {
+                                return '<td class="fairy-spec-value">' + t + '</td>';
+                            } else {
+                                return '';
+                            }
+                        } else {
+                            return '<td>' + t + '</td>';
+                        }
                     }).join('');
 
                     that.options.skuTableConfig.tbody.forEach(function (c) {
