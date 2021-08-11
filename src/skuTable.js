@@ -133,7 +133,7 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
                 $.each(item.child, function (key, value) {
                     table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${value.checked ? 'checked' : ''}>`;
                 });
-                that.options.specValueCreateUrl && (table += '<button type="button" class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm fairy-spec-value-create"><i class="layui-icon layui-icon-addition"></i>规格值</button>');
+                that.options.specValueCreateUrl && (table += '<button type="button" class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm fairy-spec-value-create" style="margin-top: 4px;"><i class="layui-icon layui-icon-addition"></i>规格值</button>');
                 table += '</td>';
                 table += '</tr>';
             });
