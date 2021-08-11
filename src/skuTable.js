@@ -16,6 +16,8 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
             rowspan: true,
             skuIcon: '',
             uploadUrl: '',
+            specCreateUrl: '',
+            specValueCreateUrl: '',
             specData: [],
             skuData: {},
             skuTableConfig: {
@@ -81,13 +83,48 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
                     layer.close(index);
                 });
             });
+
+            /**
+             * 监听添加规格
+             */
+            $(document).on('click', '.fairy-spec-table .fairy-spec-create', function () {
+                layer.prompt({title: '规格'}, function (value, index, elem) {
+                    that.request(
+                        {type: 'post', url: that.options.specCreateUrl, data: {title: value}},
+                        function (res) {
+                            that.options.specData.push({id: res.data.id, title: value, child: []});
+                            that.renderSpecTable();
+                        });
+                    layer.close(index);
+                });
+            });
+
+            /**
+             * 监听添加规格值
+             */
+            $(document).on('click', '.fairy-spec-table .fairy-spec-value-create', function () {
+                var specId = $(this).parent('td').prev().data('id');
+                layer.prompt({title: '规格值'}, function (value, index, elem) {
+                    that.request(
+                        {type: 'post', url: that.options.specValueCreateUrl, data: {spec_id: specId, title: value}},
+                        function (res) {
+                            that.options.specData.forEach(function (v, i) {
+                                if (v.id == specId) {
+                                    v.child.push({id: res.data.id, title: value, checked: false});
+                                }
+                            });
+                            that.renderSpecTable();
+                        });
+                    layer.close(index);
+                });
+            });
         }
 
         /**
          * 渲染规格表
          */
         renderSpecTable() {
-            var table = '<table class="layui-table fairy-spec-table"><thead><tr><th>规格名</th><th>规格值</th></tr></thead><tbody>';
+            var that = this, table = '<table class="layui-table fairy-spec-table"><thead><tr><th>规格名</th><th>规格值</th></tr></thead><tbody>';
 
             $.each(this.options.specData, function (index, item) {
                 table += '<tr>';
@@ -96,9 +133,12 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
                 $.each(item.child, function (key, value) {
                     table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${value.checked ? 'checked' : ''}>`;
                 });
+                that.options.specValueCreateUrl && (table += '<button type="button" class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm fairy-spec-value-create"><i class="layui-icon layui-icon-addition"></i>规格值</button>');
                 table += '</td>';
                 table += '</tr>';
             });
+
+            this.options.specCreateUrl && (table += '<tr><td colspan="2"><button type="button" class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm fairy-spec-create"><i class="layui-icon layui-icon-addition"></i>规格</button></td></tr>')
 
             table += '</tbody></table>';
 
@@ -131,7 +171,7 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
                     }
                 });
 
-                table += '<colgroup><col width="70">'.repeat(prependThead.length + 1) + '</colgroup>';
+                table += '<colgroup>' + '<col width="70">'.repeat(prependThead.length + 1) + '</colgroup>';
 
                 table += '<thead>';
                 if (prependThead.length > 0) {
@@ -273,6 +313,47 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
             });
 
             return skuData;
+        }
+
+        request(option, ok, no, ex) {
+            console.log(option);
+            option.type = option.type || 'get';
+            option.url = option.url || '';
+            option.data = option.data || {};
+            option.statusName = option.statusName || 'code';
+            option.statusCode = option.statusCode || 200;
+
+            ok = ok || function (res) {
+            };
+            no = no || function (res) {
+            };
+            ex = ex || function (res) {
+            };
+
+            if (option.url == '') {
+                layer.msg('请求地址不能为空', {icon: 2, time: 3000});
+                return false;
+            }
+
+            $.ajax({
+                url: option.url,
+                type: option.type,
+                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                dataType: "json",
+                data: option.data,
+                timeout: 60000,
+                success: function (res) {
+                    if (res[option.statusName] == option.statusCode) {
+                        return ok(res);
+                    } else {
+                        return no(res);
+                    }
+                },
+                error: function (xhr, textstatus, thrown) {
+                    ex(xhr);
+                    return false;
+                }
+            });
         }
     }
 

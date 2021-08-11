@@ -44,13 +44,23 @@
     }).use(['form', 'skuTable'], function () {
         var form = layui.form, skuTable = layui.skuTable;
 
+        //注意！！！ 注意！！！ 注意！！！
+        //如果配置了相关接口请求的参数，请置本示例于服务器中预览，不然会有浏览器跨域问题
+        //示例中的json文件仅做格式返回参考，若多次执行添加规格后再为新增后的规格添加规格值，会发现所有新增的规格都增加了该规格值。注意！此处并非是bug，原因是因为示例中返回的新增规格值id是重复的，而在正常接口请求每次返回的新增规则id是不一样的
         var obj = skuTable.render({
             //sku表相同属性值是否合并行
-            rowspan: false,
+            rowspan: true,
             //上传占位图
-            skuIcon: './sku-add.png',
-            //上传地址。接口要求返回格式为 {"code": 200, "data": {"url": "xxx"}, "msg": ""}
-            uploadUrl: '',
+            skuIcon: './images/sku-add.png',
+            //上传接口地址
+            //接口要求返回格式为 {"code": 200, "data": {"url": "xxx"}, "msg": ""}
+            uploadUrl: './json/upload.json',
+            //添加规格接口地址，如果为空则表示不允许增加规格
+            //接口要求返回格式为 {"code": 200, "data": {"id":999}, "msg":""}
+            specCreateUrl: './json/specCreate.json',
+            //添加规格值接口地址，如果为空则表示不允许增加规格值
+            //接口要求返回格式为 {"code": 200, "data": {"id":999}, "msg":""}
+            specValueCreateUrl: './json/specValueCreate.json',
             //sku表格配置参数
             skuTableConfig: {
                 thead: [
@@ -70,7 +80,7 @@
                     {type: 'select', field: 'status', option: [{key: '启用', value: '1'}, {key: '禁用', value: '0'}], verify: 'required', reqtext: '状态不能为空'},
                 ]
             },
-            //规格数据
+            //规格数据, 一般从接口获取
             specData: [
                 {
                     id: "1",
