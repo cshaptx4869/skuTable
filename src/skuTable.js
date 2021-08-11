@@ -137,10 +137,11 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
                 table += '</td>';
                 table += '</tr>';
             });
+            table += '</tbody>';
 
-            this.options.specCreateUrl && (table += '<tr><td colspan="2"><button type="button" class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm fairy-spec-create"><i class="layui-icon layui-icon-addition"></i>规格</button></td></tr>')
+            this.options.specCreateUrl && (table += '<tfoot><tr><td colspan="2"><button type="button" class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm fairy-spec-create"><i class="layui-icon layui-icon-addition"></i>规格</button></td></tr></tfoot>');
 
-            table += '</tbody></table>';
+            table += '</table>';
 
             $('.fairy-spec-table').replaceWith(table);
 
@@ -316,7 +317,6 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
         }
 
         request(option, ok, no, ex) {
-            console.log(option);
             option.type = option.type || 'get';
             option.url = option.url || '';
             option.data = option.data || {};
