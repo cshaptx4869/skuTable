@@ -11,6 +11,109 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
         layer = layui.layer,
         MOD_NAME = 'skuTable';
 
+    //工具类
+    class Util {
+
+        static config = {
+            shade: [0.02, '#000'],
+            time: 2000
+        };
+
+        static msg = {
+            // 成功消息
+            success: function (msg, callback = null) {
+                return layer.msg(msg, {icon: 1, shade: Util.config.shade, scrollbar: false, time: Util.config.time, shadeClose: true}, callback);
+            },
+            // 失败消息
+            error: function (msg, callback = null) {
+                return layer.msg(msg, {icon: 2, shade: Util.config.shade, scrollbar: false, time: Util.config.time, shadeClose: true}, callback);
+            },
+            // 警告消息框
+            alert: function (msg, callback = null) {
+                return layer.alert(msg, {end: callback, scrollbar: false});
+            },
+            // 对话框
+            confirm: function (msg, ok, no) {
+                var index = layer.confirm(msg, {title: '操作确认', btn: ['确认', '取消']}, function () {
+                    typeof ok === 'function' && ok.call(this);
+                }, function () {
+                    typeof no === 'function' && no.call(this);
+                    Util.msg.close(index);
+                });
+                return index;
+            },
+            // 消息提示
+            tips: function (msg, callback = null) {
+                return layer.msg(msg, {time: Util.config.time, shade: Util.config.shade, end: callback, shadeClose: true});
+            },
+            // 加载中提示
+            loading: function (msg, callback = null) {
+                return msg ? layer.msg(msg, {icon: 16, scrollbar: false, shade: Util.config.shade, time: 0, end: callback}) : layer.load(2, {time: 0, scrollbar: false, shade: Util.config.shade, end: callback});
+            },
+            // 输入框
+            prompt: function (option, callback = null) {
+                return layer.prompt(option, callback);
+            },
+            // 关闭消息框
+            close: function (index) {
+                return layer.close(index);
+            }
+        };
+
+        static request = {
+            post: function (option, ok, no, ex) {
+                return Util.request.ajax('post', option, ok, no, ex);
+            },
+            get: function (option, ok, no, ex) {
+                return Util.request.ajax('get', option, ok, no, ex);
+            },
+            ajax: function (type, option, ok, no, ex) {
+                type = type || 'get';
+                option.url = option.url || '';
+                option.data = option.data || {};
+                option.statusName = option.statusName || 'code';
+                option.statusCode = option.statusCode || 200;
+                ok = ok || function (res) {
+                };
+                no = no || function (res) {
+                    var msg = res.msg == undefined ? '返回数据格式有误' : res.msg;
+                    Util.msg.error(msg);
+                    return false;
+                };
+                ex = ex || function (res) {
+                };
+                if (option.url == '') {
+                    Util.msg.error('请求地址不能为空');
+                    return false;
+                }
+
+                var index = Util.msg.loading('加载中');
+                $.ajax({
+                    url: option.url,
+                    type: type,
+                    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                    dataType: "json",
+                    data: option.data,
+                    timeout: 60000,
+                    success: function (res) {
+                        Util.msg.close(index);
+                        if (res[option.statusName] == option.statusCode) {
+                            return ok(res);
+                        } else {
+                            return no(res);
+                        }
+                    },
+                    error: function (xhr, textstatus, thrown) {
+                        Util.msg.error('Status:' + xhr.status + '，' + xhr.statusText + '，请稍后再试！', function () {
+                            ex(xhr);
+                        });
+                        return false;
+                    }
+                });
+            }
+        };
+    }
+
     class SkuTable {
         options = {
             rowspan: true,
@@ -73,14 +176,14 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
              */
             $(document).on('click', '.fairy-sku-table thead tr th i', function () {
                 var thisI = this;
-                layer.prompt({title: $(thisI).parent().text().trim() + '批量赋值'}, function (value, index, elem) {
+                Util.msg.prompt({title: $(thisI).parent().text().trim() + '批量赋值'}, function (value, index, elem) {
                     $.each($('.fairy-sku-table tbody tr'), function () {
                         var index = that.options.rowspan ?
                             $(thisI).parent().index() - ($('.fairy-sku-table thead th.fairy-spec-name').length - $(this).children('td.fairy-spec-value').length) :
                             $(thisI).parent().index();
                         $(this).find('td').eq(index).children('input').val(value);
                     });
-                    layer.close(index);
+                    Util.msg.close(index);
                 });
             });
 
@@ -89,13 +192,13 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
              */
             $(document).on('click', '.fairy-spec-table .fairy-spec-create', function () {
                 layer.prompt({title: '规格'}, function (value, index, elem) {
-                    that.request(
-                        {type: 'post', url: that.options.specCreateUrl, data: {title: value}},
+                    Util.request.post(
+                        {url: that.options.specCreateUrl, data: {title: value}},
                         function (res) {
                             that.options.specData.push({id: res.data.id, title: value, child: []});
                             that.renderSpecTable();
                         });
-                    layer.close(index);
+                    Util.msg.close(index);
                 });
             });
 
@@ -105,8 +208,8 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
             $(document).on('click', '.fairy-spec-table .fairy-spec-value-create', function () {
                 var specId = $(this).parent('td').prev().data('id');
                 layer.prompt({title: '规格值'}, function (value, index, elem) {
-                    that.request(
-                        {type: 'post', url: that.options.specValueCreateUrl, data: {spec_id: specId, title: value}},
+                    Util.request.post(
+                        {url: that.options.specValueCreateUrl, data: {spec_id: specId, title: value}},
                         function (res) {
                             that.options.specData.forEach(function (v, i) {
                                 if (v.id == specId) {
@@ -115,7 +218,7 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
                             });
                             that.renderSpecTable();
                         });
-                    layer.close(index);
+                    Util.msg.close(index);
                 });
             });
         }
@@ -280,9 +383,10 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
                     if (res.code === 200) {
                         var url = res.data.url;
                         $(this.item).attr('src', url).prev().val(url);
-                        layer.msg(res.msg);
+                        Util.msg.success(res.msg);
                     } else {
-                        layer.msg(res.msg);
+                        var msg = res.msg == undefined ? '返回数据格式有误' : res.msg;
+                        Util.msg.error(msg);
                     }
                     return false;
                 }
@@ -316,45 +420,6 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
             return skuData;
         }
 
-        request(option, ok, no, ex) {
-            option.type = option.type || 'get';
-            option.url = option.url || '';
-            option.data = option.data || {};
-            option.statusName = option.statusName || 'code';
-            option.statusCode = option.statusCode || 200;
-
-            ok = ok || function (res) {
-            };
-            no = no || function (res) {
-            };
-            ex = ex || function (res) {
-            };
-
-            if (option.url == '') {
-                layer.msg('请求地址不能为空', {icon: 2, time: 3000});
-                return false;
-            }
-
-            $.ajax({
-                url: option.url,
-                type: option.type,
-                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-                dataType: "json",
-                data: option.data,
-                timeout: 60000,
-                success: function (res) {
-                    if (res[option.statusName] == option.statusCode) {
-                        return ok(res);
-                    } else {
-                        return no(res);
-                    }
-                },
-                error: function (xhr, textstatus, thrown) {
-                    ex(xhr);
-                    return false;
-                }
-            });
-        }
     }
 
     exports(MOD_NAME, {
