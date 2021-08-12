@@ -75,8 +75,6 @@
         var obj = skuTable.render({
             //sku表相同属性值是否合并行
             rowspan: true,
-            //上传占位图
-            skuIcon: './images/sku-add.png',
             //上传接口地址
             //接口要求返回格式为 {"code": 200, "data": {"url": "xxx"}, "msg": ""}
             uploadUrl: './json/upload.json',
