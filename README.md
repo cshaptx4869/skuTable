@@ -8,6 +8,8 @@
 
 ## 效果
 
+[在线演示](https://www.jq22.com/yanshi23988)
+
 ![Snipaste_2021-08-04_17-38-53.png](https://i.loli.net/2021/08/04/jkaxlJYsnywNUMZ.png)
 
 
@@ -103,7 +105,7 @@
                     {type: 'select', field: 'status', option: [{key: '启用', value: '1'}, {key: '禁用', value: '0'}], verify: 'required', reqtext: '状态不能为空'},
                 ]
             },
-            //规格数据, 一般从接口获取
+            //规格数据, 一般从后台获取
             specData: [
                 {
                     id: "1",
