@@ -20,8 +20,6 @@
 
 ## 示例
 
-> 注意：带 fairy* 的 class 属性值固定写法不可更改！
-
 ```html
 <!doctype html>
 <html lang="zh">
@@ -41,7 +39,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">规格：</label>
             <div class="layui-input-block">
-                <div class="fairy-spec-table"></div>
+                <div id="fairy-spec-table"></div>
             </div>
         </div>
 
@@ -49,7 +47,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">SKU表：</label>
             <div class="layui-input-block">
-                <div class="fairy-sku-table"></div>
+                <div id="fairy-sku-table"></div>
             </div>
         </div>
 
@@ -75,6 +73,10 @@
         //如果配置了相关接口请求的参数，请置本示例于服务器中预览，不然会有浏览器跨域问题
         //示例中的json文件仅做格式返回参考，若多次执行添加规格后再为新增后的规格添加规格值，会发现所有新增的规格都增加了该规格值。注意！此处并非是bug，原因是因为示例中返回的新增规格值id是重复的，而在正常接口请求每次返回的新增规则id是不一样的
         var obj = skuTable.render({
+            //规格表容器id
+            specTableElemId: 'fairy-spec-table',
+            //sku表容器id
+            skuTableElemId: 'fairy-sku-table',
             //sku表相同属性值是否合并行
             rowspan: true,
             //上传接口地址

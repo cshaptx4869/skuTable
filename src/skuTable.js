@@ -22,11 +22,23 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
         static msg = {
             // 成功消息
             success: function (msg, callback = null) {
-                return layer.msg(msg, {icon: 1, shade: Util.config.shade, scrollbar: false, time: Util.config.time, shadeClose: true}, callback);
+                return layer.msg(msg, {
+                    icon: 1,
+                    shade: Util.config.shade,
+                    scrollbar: false,
+                    time: Util.config.time,
+                    shadeClose: true
+                }, callback);
             },
             // 失败消息
             error: function (msg, callback = null) {
-                return layer.msg(msg, {icon: 2, shade: Util.config.shade, scrollbar: false, time: Util.config.time, shadeClose: true}, callback);
+                return layer.msg(msg, {
+                    icon: 2,
+                    shade: Util.config.shade,
+                    scrollbar: false,
+                    time: Util.config.time,
+                    shadeClose: true
+                }, callback);
             },
             // 警告消息框
             alert: function (msg, callback = null) {
@@ -44,11 +56,22 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
             },
             // 消息提示
             tips: function (msg, callback = null) {
-                return layer.msg(msg, {time: Util.config.time, shade: Util.config.shade, end: callback, shadeClose: true});
+                return layer.msg(msg, {
+                    time: Util.config.time,
+                    shade: Util.config.shade,
+                    end: callback,
+                    shadeClose: true
+                });
             },
             // 加载中提示
             loading: function (msg, callback = null) {
-                return msg ? layer.msg(msg, {icon: 16, scrollbar: false, shade: Util.config.shade, time: 0, end: callback}) : layer.load(2, {time: 0, scrollbar: false, shade: Util.config.shade, end: callback});
+                return msg ? layer.msg(msg, {
+                    icon: 16,
+                    scrollbar: false,
+                    shade: Util.config.shade,
+                    time: 0,
+                    end: callback
+                }) : layer.load(2, {time: 0, scrollbar: false, shade: Util.config.shade, end: callback});
             },
             // 输入框
             prompt: function (option, callback = null) {
@@ -116,6 +139,8 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
 
     class SkuTable {
         options = {
+            specTableElemId: 'fairy-spec-table',
+            skuTableElemId: 'fairy-sku-table',
             rowspan: true,
             skuIcon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjczN0RFNzU1MTk1RTExRTlBMEQ5OEEwMEM5NDNFOEE4IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjczN0RFNzU2MTk1RTExRTlBMEQ5OEEwMEM5NDNFOEE4Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NzM3REU3NTMxOTVFMTFFOUEwRDk4QTAwQzk0M0U4QTgiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NzM3REU3NTQxOTVFMTFFOUEwRDk4QTAwQzk0M0U4QTgiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5NHmJUAAAA+0lEQVR42pySPwsBYRzH7zk3KIP34CVIKSOrELLJdpuymyzew90kIwMZvACDsCldWZTFn5WQpPN5rlPXlXJ39en7/J57fn+fR9i2rYT5NNM0B2gC3n/6qHBQDMOwZNYg4LOQ3vcQld40/w6lC13Xbd/eHElC3G1JqL4DFWSNprz7BMpAFJ6YkW+jThaosuxAD/rY6R9lCmeq8IAmtKBA1A1OW9YjtIS9QvPYRZkcXo43EzqjF/mDQ5an7ALShTFk4eQOsgFTWeoNKl4nt68J0oYc1LHLbmtDp1IyLgPe4QCuMkIsyAWSuYbs5HD29DML8OTkHR9F2Ef+EWAAdwmkvBAtw94AAAAASUVORK5CYII=',
             uploadUrl: '',
@@ -138,7 +163,13 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
                     {type: 'input', field: 'market_price', value: '0', verify: 'required|number', reqtext: '市场价不能为空'},
                     {type: 'input', field: 'cost_price', value: '0', verify: 'required|number', reqtext: '成本价不能为空'},
                     {type: 'input', field: 'stock', value: '0', verify: 'required|number', reqtext: '库存不能为空'},
-                    {type: 'select', field: 'status', option: [{key: '启用', value: '1'}, {key: '禁用', value: '0'}], verify: '', reqtext: ''},
+                    {
+                        type: 'select',
+                        field: 'status',
+                        option: [{key: '启用', value: '1'}, {key: '禁用', value: '0'}],
+                        verify: '',
+                        reqtext: ''
+                    },
                 ]
             }
         };
@@ -158,12 +189,16 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
              */
             form.on('checkbox(fairy-spec-filter)', function (data) {
                 var specData = [];
-                $.each($('.fairy-spec-table tbody tr'), function () {
+                $.each($(`#${that.options.specTableElemId} tbody tr`), function () {
                     var child = [];
                     $.each($(this).find('input[type=checkbox]'), function () {
                         child.push({id: $(this).val(), title: $(this).attr('title'), checked: $(this).is(':checked')});
                     });
-                    var specItem = {id: $(this).find('td').eq(0).data('id'), title: $(this).find('td').eq(0).text(), child: child};
+                    var specItem = {
+                        id: $(this).find('td').eq(0).data('id'),
+                        title: $(this).find('td').eq(0).text(),
+                        child: child
+                    };
                     specData.push(specItem);
                 });
                 that.options.specData = specData;
@@ -174,12 +209,12 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
             /**
              * 监听批量赋值
              */
-            $(document).on('click', '.fairy-sku-table thead tr th i', function () {
+            $(document).on('click', `#${this.options.skuTableElemId} thead tr th i`, function () {
                 var thisI = this;
                 Util.msg.prompt({title: $(thisI).parent().text().trim() + '批量赋值'}, function (value, index, elem) {
-                    $.each($('.fairy-sku-table tbody tr'), function () {
+                    $.each($(`#${that.options.skuTableElemId} tbody tr`), function () {
                         var index = that.options.rowspan ?
-                            $(thisI).parent().index() - ($('.fairy-sku-table thead th.fairy-spec-name').length - $(this).children('td.fairy-spec-value').length) :
+                            $(thisI).parent().index() - ($(`#${that.options.skuTableElemId} thead th.fairy-spec-name`).length - $(this).children('td.fairy-spec-value').length) :
                             $(thisI).parent().index();
                         $(this).find('td').eq(index).children('input').val(value);
                     });
@@ -190,7 +225,7 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
             /**
              * 监听添加规格
              */
-            $(document).on('click', '.fairy-spec-table .fairy-spec-create', function () {
+            $(document).on('click', `#${this.options.specTableElemId} .fairy-spec-create`, function () {
                 layer.prompt({title: '规格'}, function (value, index, elem) {
                     Util.request.post(
                         {url: that.options.specCreateUrl, data: {title: value}},
@@ -205,7 +240,7 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
             /**
              * 监听添加规格值
              */
-            $(document).on('click', '.fairy-spec-table .fairy-spec-value-create', function () {
+            $(document).on('click', `#${this.options.specTableElemId} .fairy-spec-value-create`, function () {
                 var specId = $(this).parent('td').prev().data('id');
                 layer.prompt({title: '规格值'}, function (value, index, elem) {
                     Util.request.post(
@@ -227,7 +262,8 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
          * 渲染规格表
          */
         renderSpecTable() {
-            var that = this, table = '<table class="layui-table fairy-spec-table"><thead><tr><th>规格名</th><th>规格值</th></tr></thead><tbody>';
+            var that = this,
+                table = `<table class="layui-table" id="${this.options.specTableElemId}"><thead><tr><th>规格名</th><th>规格值</th></tr></thead><tbody>`;
 
             $.each(this.options.specData, function (index, item) {
                 table += '<tr>';
@@ -246,7 +282,7 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
 
             table += '</table>';
 
-            $('.fairy-spec-table').replaceWith(table);
+            $(`#${this.options.specTableElemId}`).replaceWith(table);
 
             form.render();
         }
@@ -255,9 +291,9 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
          * 渲染sku表
          */
         renderSkuTable() {
-            var that = this, table = '<table class="layui-table fairy-sku-table">';
+            var that = this, table = `<table class="layui-table" id="${this.options.skuTableElemId}">`;
 
-            if ($('.fairy-spec-table tbody input[type=checkbox]:checked').length) {
+            if ($(`#${this.options.specTableElemId} tbody input[type=checkbox]:checked`).length) {
                 var prependThead = [], prependTbody = [];
                 $.each(this.options.specData, function (index, item) {
                     var isShow = item.child.some(function (value, index, array) {
@@ -368,7 +404,7 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
 
             table += '</table>';
 
-            $('.fairy-sku-table').replaceWith(table);
+            $(`#${that.options.skuTableElemId}`).replaceWith(table);
 
             form.render();
 
