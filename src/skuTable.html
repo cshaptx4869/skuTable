@@ -38,11 +38,9 @@
 </div>
 <!-- 引入 layui.js -->
 <script src="./layui/layui.js"></script>
-<!-- 引入 skuTable.js -->
-<script src="./skuTable.js"></script>
 <script>
     layui.config({
-        base: './'
+        base: './lay-module/', // 设定扩展的 layui 模块的所在目录，一般用于外部模块扩展
     }).use(['form', 'skuTable'], function () {
         var form = layui.form, skuTable = layui.skuTable;
 

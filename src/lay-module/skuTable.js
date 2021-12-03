@@ -3,12 +3,13 @@
  * Author: cshaptx4869
  * Project: https://github.com/cshaptx4869/skuTable
  */
-layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
+layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (exports) {
     "use strict";
     var $ = layui.jquery,
         form = layui.form,
         upload = layui.upload,
         layer = layui.layer,
+        sortable = layui.sortable,
         MOD_NAME = 'skuTable';
 
     //工具类
@@ -256,6 +257,23 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
                     Util.msg.close(index);
                 });
             });
+
+            /**
+             * 拖拽
+             */
+            var sortableObj = sortable.create($(`#${this.options.specTableElemId} tbody`)[0], {
+                animation: 1000,
+                onEnd: (evt) => {
+                    //获取拖动后的排序
+                    var sortArr = sortableObj.toArray(),
+                        sortSpecData = [];
+                    this.options.specData.forEach((item) => {
+                        sortSpecData[sortArr.indexOf(item.id)] = item;
+                    });
+                    this.options.specData = sortSpecData;
+                    this.renderSkuTable();
+                },
+            });
         }
 
         /**
@@ -266,7 +284,7 @@ layui.define(['jquery', 'form', 'upload', 'layer'], function (exports) {
                 table = `<table class="layui-table" id="${this.options.specTableElemId}"><thead><tr><th>规格名</th><th>规格值</th></tr></thead><tbody>`;
 
             $.each(this.options.specData, function (index, item) {
-                table += '<tr>';
+                table += `<tr data-id="${item.id}">`;
                 table += `<td data-id="${item.id}">${item.title}</td>`;
                 table += '<td>';
                 $.each(item.child, function (key, value) {
