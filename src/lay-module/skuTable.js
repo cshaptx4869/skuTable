@@ -259,6 +259,22 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             });
 
             /**
+             * 监听删除规格/规格值
+             */
+            $(document).on('click', `#${this.options.specTableElemId} i.layui-icon-delete`, function () {
+                if (typeof $(this).attr('data-spec-index') !== "undefined") {
+                    that.options.specData.splice($(this).data('spec-index'), 1);
+                } else if (typeof $(this).attr('data-spec-value-index') !== "undefined") {
+                    var [i, ii] = $(this).data('spec-value-index').split('-');
+                    that.options.specData[i].child.splice(ii, 1);
+                } else {
+                    return;
+                }
+                that.renderSpecTable();
+                that.renderSkuTable();
+            });
+
+            /**
              * 拖拽
              */
             var sortableObj = sortable.create($(`#${this.options.specTableElemId} tbody`)[0], {
@@ -285,10 +301,10 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 
             $.each(this.options.specData, function (index, item) {
                 table += `<tr data-id="${item.id}">`;
-                table += `<td data-id="${item.id}">${item.title}</td>`;
+                table += `<td data-id="${item.id}">${item.title} <i class="layui-icon layui-icon-delete" style="cursor: pointer;" title="删除规格" data-spec-index="${index}"></i></td>`;
                 table += '<td>';
                 $.each(item.child, function (key, value) {
-                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${value.checked ? 'checked' : ''}>`;
+                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${value.checked ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete" style="cursor:pointer;margin-right:15px;margin-left:-12px;vertical-align: top;" title="删除规格值" data-spec-value-index="${index}-${key}"></i> `;
                 });
                 that.options.specValueCreateUrl && (table += '<button type="button" class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm fairy-spec-value-create" style="margin-top: 4px;"><i class="layui-icon layui-icon-addition"></i>规格值</button>');
                 table += '</td>';
