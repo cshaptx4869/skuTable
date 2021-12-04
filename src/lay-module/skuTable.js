@@ -275,6 +275,15 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             });
 
             /**
+             * 监听规格行鼠标移入移出
+             */
+            $(document).on('mouseover', `#${this.options.specTableElemId} tbody tr`, function () {
+                $(this).find('.layui-icon-delete').removeClass('layui-hide');
+            }).on('mouseleave', `#${this.options.specTableElemId} tbody tr`, function () {
+                $(this).find('.layui-icon-delete').addClass('layui-hide');
+            });
+
+            /**
              * 拖拽
              */
             var sortableObj = sortable.create($(`#${this.options.specTableElemId} tbody`)[0], {
@@ -297,14 +306,14 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
          */
         renderSpecTable() {
             var that = this,
-                table = `<table class="layui-table" id="${this.options.specTableElemId}"><thead><tr><th>规格名</th><th>规格值</th></tr></thead><tbody>`;
+                table = `<table class="layui-table" id="${this.options.specTableElemId}"><thead><tr><th>规格名</th><th>规格值</th></tr></thead><colgroup><col width="140"></colgroup><tbody>`;
 
             $.each(this.options.specData, function (index, item) {
-                table += `<tr data-id="${item.id}">`;
-                table += `<td data-id="${item.id}">${item.title} <i class="layui-icon layui-icon-delete" style="cursor: pointer;" title="删除规格" data-spec-index="${index}"></i></td>`;
+                table += `<tr data-id="${item.id}" style="cursor: move;">`;
+                table += `<td data-id="${item.id}">${item.title} <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale layui-hide" style="cursor: pointer;" title="删除规格" data-spec-index="${index}"></i></td>`;
                 table += '<td>';
                 $.each(item.child, function (key, value) {
-                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${value.checked ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete" style="cursor:pointer;margin-right:15px;margin-left:-12px;vertical-align: top;" title="删除规格值" data-spec-value-index="${index}-${key}"></i> `;
+                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${value.checked ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale layui-hide" style="cursor:pointer;margin-right:15px;margin-left:-12px;vertical-align: top;" title="删除规格值" data-spec-value-index="${index}-${key}"></i> `;
                 });
                 that.options.specValueCreateUrl && (table += '<button type="button" class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm fairy-spec-value-create" style="margin-top: 4px;"><i class="layui-icon layui-icon-addition"></i>规格值</button>');
                 table += '</td>';
