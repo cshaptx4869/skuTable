@@ -299,6 +299,8 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     this.renderSkuTable();
                 },
             });
+            $('head').append(`<style>#${this.options.specTableElemId} tbody tr{transition:unset; -webkit-transition:unset;}</style>`);
+
         }
 
         /**
