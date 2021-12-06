@@ -177,9 +177,38 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 
         constructor(options) {
             this.options = $.extend(this.options, options);
+            this.css();
             this.renderSpecTable();
             this.renderSkuTable();
             this.listen();
+        }
+
+        css() {
+            $('head').append(`<style>
+                #${this.options.specTableElemId} tbody tr {
+                  cursor: move;
+                  transition:unset;
+                  -webkit-transition:unset;
+                } 
+                #${this.options.specTableElemId} tbody tr td > i.layui-icon-delete {
+                  cursor: pointer;
+                }
+                #${this.options.specTableElemId} tbody tr td:last-child > i.layui-icon-delete {
+                  margin-right:15px;
+                  margin-left:-12px;
+                  vertical-align: top;
+                }
+                #${this.options.specTableElemId} tbody tr td:last-child > button {
+                  margin-top: 4px;
+                }
+                #${this.options.skuTableElemId} thead tr th > i.layui-icon {
+                  cursor: pointer;
+                }
+                #${this.options.skuTableElemId} tbody tr td > img {
+                  cursor: pointer;
+                }
+                </style>`
+            );
         }
 
         listen() {
@@ -299,7 +328,6 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     this.renderSkuTable();
                 },
             });
-            $('head').append(`<style>#${this.options.specTableElemId} tbody tr{transition:unset; -webkit-transition:unset;}</style>`);
 
         }
 
@@ -311,13 +339,13 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                 table = `<table class="layui-table" id="${this.options.specTableElemId}"><thead><tr><th>规格名</th><th>规格值</th></tr></thead><colgroup><col width="140"></colgroup><tbody>`;
 
             $.each(this.options.specData, function (index, item) {
-                table += `<tr data-id="${item.id}" style="cursor: move;">`;
-                table += `<td data-id="${item.id}">${item.title} <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale layui-hide" style="cursor: pointer;" title="删除规格" data-spec-index="${index}"></i></td>`;
+                table += `<tr data-id="${item.id}">`;
+                table += `<td data-id="${item.id}">${item.title} <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale layui-hide" title="删除规格" data-spec-index="${index}"></i></td>`;
                 table += '<td>';
                 $.each(item.child, function (key, value) {
-                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${value.checked ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale layui-hide" style="cursor:pointer;margin-right:15px;margin-left:-12px;vertical-align: top;" title="删除规格值" data-spec-value-index="${index}-${key}"></i> `;
+                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${value.checked ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale layui-hide" title="删除规格值" data-spec-value-index="${index}-${key}"></i> `;
                 });
-                that.options.specValueCreateUrl && (table += '<button type="button" class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm fairy-spec-value-create" style="margin-top: 4px;"><i class="layui-icon layui-icon-addition"></i>规格值</button>');
+                that.options.specValueCreateUrl && (table += '<button type="button" class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm fairy-spec-value-create"><i class="layui-icon layui-icon-addition"></i>规格值</button>');
                 table += '</td>';
                 table += '</tr>';
             });
@@ -367,7 +395,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     }).join('');
 
                     this.options.skuTableConfig.thead.forEach(function (item) {
-                        theadTr += '<th>' + item.title + (item.icon ? ' <i class="layui-icon ' + item.icon + '" style="cursor: pointer;" title="批量赋值"></i>' : '') + '</th>';
+                        theadTr += '<th>' + item.title + (item.icon ? ' <i class="layui-icon ' + item.icon + '" title="批量赋值"></i>' : '') + '</th>';
                     });
 
                     theadTr += '</tr>';
@@ -417,7 +445,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     that.options.skuTableConfig.tbody.forEach(function (c) {
                         switch (c.type) {
                             case "image":
-                                tr += '<td><input type="hidden" name="skus[' + item.id + '][' + c.field + ']" value="' + (that.options.skuData[that.makeSkuName(item.id, c.field)] ? that.options.skuData[that.makeSkuName(item.id, c.field)] : c.value) + '" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '"><img class="fairy-sku-img" style="cursor: pointer;" src="' + (that.options.skuData[that.makeSkuName(item.id, c.field)] ? that.options.skuData[that.makeSkuName(item.id, c.field)] : that.options.skuIcon) + '" alt="' + c.field + '图片"></td>';
+                                tr += '<td><input type="hidden" name="skus[' + item.id + '][' + c.field + ']" value="' + (that.options.skuData[that.makeSkuName(item.id, c.field)] ? that.options.skuData[that.makeSkuName(item.id, c.field)] : c.value) + '" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '"><img class="fairy-sku-img" src="' + (that.options.skuData[that.makeSkuName(item.id, c.field)] ? that.options.skuData[that.makeSkuName(item.id, c.field)] : that.options.skuIcon) + '" alt="' + c.field + '图片" title="上传图片"></td>';
                                 break;
                             case "select":
                                 tr += '<td><select name="skus[' + item.id + '][' + c.field + ']" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '">';
