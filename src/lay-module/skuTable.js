@@ -311,24 +311,6 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             }).on('mouseleave', `#${this.options.specTableElemId} tbody tr`, function () {
                 $(this).find('.layui-icon-delete').addClass('layui-hide');
             });
-
-            /**
-             * 拖拽
-             */
-            var sortableObj = sortable.create($(`#${this.options.specTableElemId} tbody`)[0], {
-                animation: 1000,
-                onEnd: (evt) => {
-                    //获取拖动后的排序
-                    var sortArr = sortableObj.toArray(),
-                        sortSpecData = [];
-                    this.options.specData.forEach((item) => {
-                        sortSpecData[sortArr.indexOf(item.id)] = item;
-                    });
-                    this.options.specData = sortSpecData;
-                    this.renderSkuTable();
-                },
-            });
-
         }
 
         /**
@@ -358,6 +340,23 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             $(`#${this.options.specTableElemId}`).replaceWith(table);
 
             form.render();
+
+            /**
+             * 拖拽
+             */
+            var sortableObj = sortable.create($(`#${this.options.specTableElemId} tbody`)[0], {
+                animation: 1000,
+                onEnd: (evt) => {
+                    //获取拖动后的排序
+                    var sortArr = sortableObj.toArray(),
+                        sortSpecData = [];
+                    this.options.specData.forEach((item) => {
+                        sortSpecData[sortArr.indexOf(String(item.id))] = item;
+                    });
+                    this.options.specData = sortSpecData;
+                    this.renderSkuTable();
+                },
+            });
         }
 
         /**
