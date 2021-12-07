@@ -110,11 +110,14 @@
                     ]
                 }
             ],
+            //获取规格数据接口地址，如果为空或者不配置则使用 specData 参数配置
+            //接口要求返回格式参考 specData.json
+            // specDataUrl: './json/specData.json',
             //sku数据
             //新增的时候为空对象
             //编辑的时候可以从后台接收，会自动填充sku表，可以去掉注释看效果
             // skuData: {
-            //     "skus[1-4-8][picture]": "https://cdn.layui.com/upload/2019_5/168_1559291577683_9348.png",
+            //     "skus[1-4-8][picture]": "https://www.baidu.com/img/flexible/logo/pc/result.png",
             //     "skus[1-4-8][price]": "100",
             //     "skus[1-4-8][market_price]": "200",
             //     "skus[1-4-8][cost_price]": "50",
@@ -138,7 +141,10 @@
             //     "skus[1-5-9][cost_price]": "0",
             //     "skus[1-5-9][stock]": "0",
             //     "skus[1-5-9][status]": "1"
-            // }
+            // },
+            //获取SKU数据接口地址，如果为空或者不配置则使用skuData配置
+            //接口要求返回格式参考 skuData.json
+            // skuDataUrl: './json/skuData.json',
         });
 
         form.on('submit(submit)', function (data) {
