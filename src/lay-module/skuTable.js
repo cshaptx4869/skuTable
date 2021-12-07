@@ -147,6 +147,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             uploadUrl: '',
             specCreateUrl: '',
             specValueCreateUrl: '',
+            specDataDelete: false,
             specData: [],
             specDataUrl: '',
             skuData: {},
@@ -215,7 +216,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                   cursor: move;
                   transition:unset;
                   -webkit-transition:unset;
-                } 
+                }
                 #${this.options.specTableElemId} tbody tr td > i.layui-icon-delete {
                   cursor: pointer;
                 }
@@ -330,12 +331,15 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             });
 
             /**
-             * 监听规格行鼠标移入移出
+             * 监听规格表是否开启删除
              */
-            $(document).on('mouseover', `#${this.options.specTableElemId} tbody tr`, function () {
-                $(this).find('.layui-icon-delete').removeClass('layui-hide');
-            }).on('mouseleave', `#${this.options.specTableElemId} tbody tr`, function () {
-                $(this).find('.layui-icon-delete').addClass('layui-hide');
+            form.on('checkbox(fairy-spec-delete-filter)', function (data) {
+                that.options.specDataDelete = data.elem.checked;
+                if (data.elem.checked) {
+                    $(`#${that.options.specTableElemId} tbody tr i.layui-icon-delete`).removeClass('layui-hide');
+                } else {
+                    $(`#${that.options.specTableElemId} tbody tr i.layui-icon-delete`).addClass('layui-hide')
+                }
             });
         }
 
@@ -348,10 +352,10 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 
             $.each(this.options.specData, function (index, item) {
                 table += `<tr data-id="${item.id}">`;
-                table += `<td data-id="${item.id}">${item.title} <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale layui-hide" title="删除规格" data-spec-index="${index}"></i></td>`;
+                table += `<td data-id="${item.id}">${item.title} <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.options.specDataDelete ? '' : 'layui-hide'}" title="删除规格" data-spec-index="${index}"></i></td>`;
                 table += '<td>';
                 $.each(item.child, function (key, value) {
-                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${value.checked ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale layui-hide" title="删除规格值" data-spec-value-index="${index}-${key}"></i> `;
+                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${value.checked ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.options.specDataDelete ? '' : 'layui-hide'}" title="删除规格值" data-spec-value-index="${index}-${key}"></i> `;
                 });
                 that.options.specValueCreateUrl && (table += '<button type="button" class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm fairy-spec-value-create"><i class="layui-icon layui-icon-addition"></i>规格值</button>');
                 table += '</td>';
@@ -359,7 +363,12 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             });
             table += '</tbody>';
 
-            this.options.specCreateUrl && (table += '<tfoot><tr><td colspan="2"><button type="button" class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm fairy-spec-create"><i class="layui-icon layui-icon-addition"></i>规格</button></td></tr></tfoot>');
+            table += '<tfoot><tr><td colspan="2">';
+            table += `<input type="checkbox" title="开启删除" lay-skin="primary" lay-filter="fairy-spec-delete-filter" ${that.options.specDataDelete ? 'checked' : ''}/>`;
+            if (this.options.specCreateUrl) {
+                table += `<button type="button" class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm fairy-spec-create"><i class="layui-icon layui-icon-addition"></i>规格</button>`;
+            }
+            table += '</td></tr></tfoot>';
 
             table += '</table>';
 
