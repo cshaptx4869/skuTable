@@ -31,16 +31,18 @@
 | 参数               | 说明                      | 类型   | 默认值           | 备注                                                         |
 | ------------------ | ------------------------- | ------ | ---------------- | ------------------------------------------------------------ |
 | specTableElemId    | 规格表容器id              | string | fairy-spec-table |                                                              |
-| skuTableElemId     | sku表容器id               | string | fairy-sku-table  |                                                              |
-| rowspan            | sku表相同属性值是否合并行 | bool   | false            |                                                              |
-| uploadUrl          | 上传接口地址              | string | 空               | 一般用来设置sku的图片。接口要求返回格式参考 upload.json      |
+| skuTableElemId     | SKU表容器id               | string | fairy-sku-table  |                                                              |
+| rowspan            | SKU表相同属性值是否合并行 | bool   | false            |                                                              |
+| uploadUrl          | 上传接口地址              | string | 空               | 一般用来设置SKU的图片。接口要求返回格式参考 upload.json      |
 | specCreateUrl      | 添加规格接口地址          | string | 空               | 如果为空则表示不允许增加规格。接口要求返回格式参考 specCreate.json |
 | specValueCreateUrl | 添加规格值接口地址        | string | 空               | 如果为空则表示不允许增加规格值。接口要求返回格式参考 specValueCreate.json |
-| skuTableConfig     | sku表格配置参数           | object | 见下方示例       | 内置了sku表头相关信息（图片、销售价、市场价、成本价、库存、状态） |
+| skuTableConfig     | SKU表格配置参数           | object | 见下方示例       | 内置了SKU表头相关信息（图片、销售价、市场价、成本价、库存、状态） |
 | specData           | 规格数据                  | array  | []               |                                                              |
 | specDataUrl        | 获取规格数据接口地址      | string | 空               | 优先级比specData高。接口要求返回格式参考 specData.json       |
-| skuData            | sku数据                   | object | {}               | 编辑的时候可以从后台接收，会自动填充sku表                    |
+| skuData            | SKU数据                   | object | {}               | 编辑的时候可以从后台接收，会自动填充SKU表                    |
 | skuDataUrl         | 获取SKU数据接口地址       | string | 空               | 优先级比skuData高。接口要求返回格式参考 skuData.json         |
+| skuNameType        | 返回的SKU名称类型         | number | 0                | 0表示数值，如：1-4-8；1表示文字，如：红-S-男款               |
+| skuIcon            | SKU图片上传占位图         | string |                  |                                                              |
 
 
 

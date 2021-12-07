@@ -151,6 +151,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             specDataUrl: '',
             skuData: {},
             skuDataUrl: '',
+            skuNameType: 0,
             skuTableConfig: {
                 thead: [
                     {title: '图片', icon: ''},
@@ -468,18 +469,18 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     that.options.skuTableConfig.tbody.forEach(function (c) {
                         switch (c.type) {
                             case "image":
-                                tr += '<td><input type="hidden" name="skus[' + item.id + '][' + c.field + ']" value="' + (that.options.skuData[that.makeSkuName(item.id, c.field)] ? that.options.skuData[that.makeSkuName(item.id, c.field)] : c.value) + '" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '"><img class="fairy-sku-img" src="' + (that.options.skuData[that.makeSkuName(item.id, c.field)] ? that.options.skuData[that.makeSkuName(item.id, c.field)] : that.options.skuIcon) + '" alt="' + c.field + '图片" title="上传图片"></td>';
+                                tr += '<td><input type="hidden" name="' + that.makeSkuName(item, c) + '" value="' + (that.options.skuData[that.makeSkuName(item, c)] ? that.options.skuData[that.makeSkuName(item, c)] : c.value) + '" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '"><img class="fairy-sku-img" src="' + (that.options.skuData[that.makeSkuName(item, c)] ? that.options.skuData[that.makeSkuName(item, c)] : that.options.skuIcon) + '" alt="' + c.field + '图片" title="上传图片"></td>';
                                 break;
                             case "select":
-                                tr += '<td><select name="skus[' + item.id + '][' + c.field + ']" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '">';
+                                tr += '<td><select name="' + that.makeSkuName(item, c) + '" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '">';
                                 c.option.forEach(function (o) {
-                                    tr += '<option value="' + o.value + '" ' + (that.options.skuData[that.makeSkuName(item.id, c.field)] == o.value ? 'selected' : '') + '>' + o.key + '</option>';
+                                    tr += '<option value="' + o.value + '" ' + (that.options.skuData[that.makeSkuName(item, c)] == o.value ? 'selected' : '') + '>' + o.key + '</option>';
                                 });
                                 tr += '</select></td>';
                                 break;
                             case "input":
                             default:
-                                tr += '<td><input type="text" name="skus[' + item.id + '][' + c.field + ']" value="' + (that.options.skuData[that.makeSkuName(item.id, c.field)] ? that.options.skuData[that.makeSkuName(item.id, c.field)] : c.value) + '" class="layui-input" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '"></td>';
+                                tr += '<td><input type="text" name="' + that.makeSkuName(item, c) + '" value="' + (that.options.skuData[that.makeSkuName(item, c)] ? that.options.skuData[that.makeSkuName(item, c)] : c.value) + '" class="layui-input" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '"></td>';
                                 break;
                         }
                     });
@@ -525,8 +526,8 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             });
         }
 
-        makeSkuName(value, field) {
-            return 'skus[' + value + '][' + field + ']';
+        makeSkuName(sku, conf) {
+            return 'skus[' + (this.options.skuNameType === 0 ? sku.id : sku.title) + '][' + conf.field + ']';
         }
 
         getSpecData() {
