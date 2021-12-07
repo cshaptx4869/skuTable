@@ -152,6 +152,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             skuData: {},
             skuDataUrl: '',
             skuNameType: 0,
+            skuNameDelimiter: '-',
             skuTableConfig: {
                 thead: [
                     {title: '图片', icon: ''},
@@ -445,14 +446,14 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     var tmp = [];
                     prev.forEach(function (a) {
                         cur.forEach(function (b) {
-                            tmp.push({id: a.id + '-' + b.id, title: a.title + '-' + b.title});
+                            tmp.push({id: a.id + that.options.skuNameDelimiter + b.id, title: a.title + that.options.skuNameDelimiter + b.title});
                         })
                     });
                     return tmp;
                 }).forEach(function (item, index, array) {
                     var tr = '<tr>';
 
-                    tr += item.title.split('-').map(function (t, i, a) {
+                    tr += item.title.split(that.options.skuNameDelimiter).map(function (t, i, a) {
                         if (that.options.rowspan) {
                             if (index % skuRowspanArr[i] === 0 && skuRowspanArr[i] > 1) {
                                 return '<td class="fairy-spec-value" rowspan="' + skuRowspanArr[i] + '">' + t + '</td>';

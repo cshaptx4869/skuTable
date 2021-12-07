@@ -42,6 +42,7 @@
 | skuData            | SKU数据                   | object | {}               | 编辑的时候可以从后台接收，会自动填充SKU表                    |
 | skuDataUrl         | 获取SKU数据接口地址       | string | 空               | 优先级比skuData高。接口要求返回格式参考 skuData.json         |
 | skuNameType        | 返回的SKU名称类型         | number | 0                | 0表示数值，如：1-4-8；1表示文字，如：红-S-男款               |
+| skuNameDelimiter   | SKU名称分隔符             | string | -                |                                                              |
 | skuIcon            | SKU图片上传占位图         | string |                  |                                                              |
 
 
