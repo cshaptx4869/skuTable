@@ -235,11 +235,18 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                 #${this.options.specTableElemId} tfoot tr td div.layui-form-checkbox > span{
                   color: #1E9FFF;
                 }
+                #${this.options.skuTableElemId} tbody tr td > img.fairy-sku-img{
+                  width: 16px;
+                  height: 16px;
+                  padding: 6px;
+                  border: 1px solid #eceef1;
+                  vertical-align: middle;
+                }
                 #${this.options.specTableElemId} tbody tr td > i.layui-icon-delete,
                 #${this.options.specTableElemId} tbody tr td div.fairy-spec-value-create,
                 #${this.options.specTableElemId} tfoot tr td div.fairy-spec-create,
                 #${this.options.skuTableElemId} thead tr th > i.layui-icon,
-                #${this.options.skuTableElemId} tbody tr td > img {
+                #${this.options.skuTableElemId} tbody tr td > img.fairy-sku-img {
                   cursor: pointer;
                 }
                 </style>`
@@ -349,6 +356,19 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     $(`#${that.options.specTableElemId} tbody tr i.layui-icon-delete`).addClass('layui-hide')
                 }
             });
+
+            /**
+             * 图片移入放大/移出恢复
+             */
+            var imgLayerIndex = null;
+            $(document).on('mouseenter', '.fairy-sku-img', function () {
+                imgLayerIndex = layer.tips('<img src="' + $(this).attr('src') + '" style="max-width:200px;"  alt=""/>', this, {
+                    tips: [2, 'rgba(41,41,41,.5)'],
+                    time: 0
+                });
+            }).on('mouseleave', '.fairy-sku-img', function () {
+                layer.close(imgLayerIndex);
+            })
         }
 
         /**
@@ -360,10 +380,10 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 
             $.each(this.options.specData, function (index, item) {
                 table += `<tr data-id="${item.id}">`;
-                table += `<td data-id="${item.id}">${item.title} <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.options.specDataDelete ? '' : 'layui-hide'}" title="删除规格" data-spec-index="${index}"></i></td>`;
+                table += `<td data-id="${item.id}">${item.title} <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.options.specDataDelete ? '' : 'layui-hide'}" data-spec-index="${index}"></i></td>`;
                 table += '<td>';
                 $.each(item.child, function (key, value) {
-                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${value.checked ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.options.specDataDelete ? '' : 'layui-hide'}" title="删除规格值" data-spec-value-index="${index}-${key}"></i> `;
+                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${value.checked ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.options.specDataDelete ? '' : 'layui-hide'}" data-spec-value-index="${index}-${key}"></i> `;
                 });
                 that.options.specValueCreateUrl && (table += '<div class="fairy-spec-value-create"><i class="layui-icon layui-icon-addition"></i>规格值</div>');
                 table += '</td>';
@@ -437,7 +457,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     }).join('');
 
                     this.options.skuTableConfig.thead.forEach(function (item) {
-                        theadTr += '<th>' + item.title + (item.icon ? ' <i class="layui-icon ' + item.icon + '" title="批量赋值"></i>' : '') + '</th>';
+                        theadTr += '<th>' + item.title + (item.icon ? ' <i class="layui-icon ' + item.icon + '"></i>' : '') + '</th>';
                     });
 
                     theadTr += '</tr>';
@@ -487,7 +507,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     that.options.skuTableConfig.tbody.forEach(function (c) {
                         switch (c.type) {
                             case "image":
-                                tr += '<td><input type="hidden" name="' + that.makeSkuName(item, c) + '" value="' + (that.options.skuData[that.makeSkuName(item, c)] ? that.options.skuData[that.makeSkuName(item, c)] : c.value) + '" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '"><img class="fairy-sku-img" src="' + (that.options.skuData[that.makeSkuName(item, c)] ? that.options.skuData[that.makeSkuName(item, c)] : that.options.skuIcon) + '" alt="' + c.field + '图片" title="上传图片"></td>';
+                                tr += '<td><input type="hidden" name="' + that.makeSkuName(item, c) + '" value="' + (that.options.skuData[that.makeSkuName(item, c)] ? that.options.skuData[that.makeSkuName(item, c)] : c.value) + '" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '"><img class="fairy-sku-img" src="' + (that.options.skuData[that.makeSkuName(item, c)] ? that.options.skuData[that.makeSkuName(item, c)] : that.options.skuIcon) + '" alt="' + c.field + '图片"></td>';
                                 break;
                             case "select":
                                 tr += '<td><select name="' + that.makeSkuName(item, c) + '" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '">';
