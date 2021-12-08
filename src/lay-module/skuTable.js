@@ -217,20 +217,28 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                   transition:unset;
                   -webkit-transition:unset;
                 }
-                #${this.options.specTableElemId} tbody tr td > i.layui-icon-delete {
-                  cursor: pointer;
-                }
                 #${this.options.specTableElemId} tbody tr td:last-child > i.layui-icon-delete {
                   margin-right:15px;
                   margin-left:-12px;
                   vertical-align: top;
                 }
-                #${this.options.specTableElemId} tbody tr td:last-child > button {
-                  margin-top: 4px;
+                #${this.options.specTableElemId} tbody tr td div.fairy-spec-value-create,
+                #${this.options.specTableElemId} tfoot tr td div.fairy-spec-create {
+                  display: inline-block;
+                  color: #1E9FFF;
+                  vertical-align: middle;
+                  padding: 4px 6px;
                 }
-                #${this.options.skuTableElemId} thead tr th > i.layui-icon {
-                  cursor: pointer;
+                #${this.options.specTableElemId} tfoot tr td div.layui-form-checkbox {
+                  margin-top: 0;
                 }
+                #${this.options.specTableElemId} tfoot tr td div.layui-form-checkbox > span{
+                  color: #1E9FFF;
+                }
+                #${this.options.specTableElemId} tbody tr td > i.layui-icon-delete,
+                #${this.options.specTableElemId} tbody tr td div.fairy-spec-value-create,
+                #${this.options.specTableElemId} tfoot tr td div.fairy-spec-create,
+                #${this.options.skuTableElemId} thead tr th > i.layui-icon,
                 #${this.options.skuTableElemId} tbody tr td > img {
                   cursor: pointer;
                 }
@@ -357,7 +365,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                 $.each(item.child, function (key, value) {
                     table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${value.checked ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.options.specDataDelete ? '' : 'layui-hide'}" title="删除规格值" data-spec-value-index="${index}-${key}"></i> `;
                 });
-                that.options.specValueCreateUrl && (table += '<button type="button" class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm fairy-spec-value-create"><i class="layui-icon layui-icon-addition"></i>规格值</button>');
+                that.options.specValueCreateUrl && (table += '<div class="fairy-spec-value-create"><i class="layui-icon layui-icon-addition"></i>规格值</div>');
                 table += '</td>';
                 table += '</tr>';
             });
@@ -366,7 +374,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             table += '<tfoot><tr><td colspan="2">';
             table += `<input type="checkbox" title="开启删除" lay-skin="primary" lay-filter="fairy-spec-delete-filter" ${that.options.specDataDelete ? 'checked' : ''}/>`;
             if (this.options.specCreateUrl) {
-                table += `<button type="button" class="layui-btn layui-btn-primary layui-border-blue layui-btn-sm fairy-spec-create"><i class="layui-icon layui-icon-addition"></i>规格</button>`;
+                table += `<div class="fairy-spec-create"><i class="layui-icon layui-icon-addition"></i>规格</div>`;
             }
             table += '</td></tr></tfoot>';
 
