@@ -14,6 +14,42 @@
 
 
 
+## SKU表结构参考
+
+```SQL
+CREATE TABLE `shop_product_sku` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `merchant_id` int(10) unsigned DEFAULT '0' COMMENT '商户id',
+  `product_id` int(11) unsigned DEFAULT '0' COMMENT '商品id',
+  `name` varchar(600) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT 'sku名称',
+  `picture` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '主图',
+  `price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '价格',
+  `market_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '市场价格',
+  `cost_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '成本价',
+  `wholesale_price` decimal(10,2) unsigned DEFAULT '0.00' COMMENT '拼团价格',
+  `stock` int(11) NOT NULL DEFAULT '0' COMMENT '库存',
+  `code` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '商品编码',
+  `barcode` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT '商品条形码',
+  `product_weight` decimal(8,2) DEFAULT '0.00' COMMENT '商品重量',
+  `product_volume` decimal(8,2) DEFAULT '0.00' COMMENT '商品体积',
+  `sort` int(11) DEFAULT '1999' COMMENT '排序',
+  `data` varchar(300) COLLATE utf8mb4_unicode_ci DEFAULT '' COMMENT 'sku串',
+  `status` tinyint(4) DEFAULT '1' COMMENT '状态[-1:删除;0:禁用;1启用]',
+  `created_at` int(10) unsigned DEFAULT '0' COMMENT '创建时间',
+  `updated_at` int(10) unsigned DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='商品_sku表'
+```
+数据参考
+
+| id   | merchant_id | product_id | name      | picture | price | market_price | cost_price | wholesale_price | stock | code | barcode | product_weight | product_volume | sort | data | status | created_at | updated_at |
+| ---- | ----------- | ---------- | --------- | ------- | ----- | ------------ | ---------- | --------------- | ----- | ---- | ------- | -------------- | -------------- | ---- | ---- | ------ | ---------- | ---------- |
+| 1    | 0           | 1          | 不辣 黑鱼 |         | 22.80 | 38.80        | 18.00      | 0.00            | 8     | 0    |         | 0.00           | 0.00           | 1999 | 1-5  | 1      | 1610675569 | 1629030640 |
+| 2    | 0           | 1          | 微辣 黑鱼 |         | 23.80 | 39.80        | 19.00      | 0.00            | 10    | 0    |         | 0.00           | 0.00           | 1999 | 2-5  | 1      | 1610692432 | 1629030640 |
+
+
+
 ## 效果
 
 [在线演示](https://www.jq22.com/yanshi23988)
