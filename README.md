@@ -54,11 +54,11 @@ CREATE TABLE `shop_product_sku` (
 
 [在线演示](https://www.jq22.com/yanshi23988)
 
-![Snipaste_2021-08-04_17-38-53.png](https://i.loli.net/2021/08/04/jkaxlJYsnywNUMZ.png)
+![](https://s3.bmp.ovh/imgs/2021/12/ca228dbe3f5caa9c.png)
 
 
 
-![Video_20210805152802 00_00_00-00_00_30.gif](https://i.loli.net/2021/08/05/sl6UiPfXvF9rQaJ.gif)
+![](https://s3.bmp.ovh/imgs/2021/12/a1e44e7893b29251.gif)
 
 
 
