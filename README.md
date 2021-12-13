@@ -71,7 +71,9 @@ CREATE TABLE `shop_product_sku` (
 | rowspan            | SKU表相同属性值是否合并行 | bool   | false            |                                                              |
 | uploadUrl          | 上传接口地址              | string | 空               | 一般用来设置SKU的图片。接口要求返回格式参考 upload.json      |
 | specCreateUrl      | 添加规格接口地址          | string | 空               | 如果为空则表示不允许增加规格。接口要求返回格式参考 specCreate.json |
+| specDeleteUrl      | 删除规格接口地址          | string | 空               | 如果为空则表示仅前端删除。接口会传递规格id，要求返回格式参考 specDelete.json |
 | specValueCreateUrl | 添加规格值接口地址        | string | 空               | 如果为空则表示不允许增加规格值。接口要求返回格式参考 specValueCreate.json |
+| specValueDeleteUrl | 删除规格值接口地址        | string | 空               | 如果为空则表示仅前端删除。接口会传递规格值id，要求返回格式参考 specValueDelete.json |
 | skuTableConfig     | SKU表格配置参数           | object | 见下方示例       | 内置了SKU表头相关信息（图片、销售价、市场价、成本价、库存、状态） |
 | specData           | 规格数据                  | array  | []               |                                                              |
 | specDataUrl        | 获取规格数据接口地址      | string | 空               | 优先级比specData高。接口要求返回格式参考 specData.json       |
