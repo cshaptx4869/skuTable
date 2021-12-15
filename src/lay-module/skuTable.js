@@ -139,25 +139,40 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
     }
 
     class SkuTable {
+        data = {
+            attributeData: [],
+            specData: [],
+            skuData: {},
+            productTypeId: '',
+            specDataDelete: false,
+        };
+
         options = {
+            mode: 0,
+            isAttributeElemId: 'fairy-is-attribute',
+            productTypeElemId: 'fairy-product-type',
+            attributeTableElemId: 'fairy-attribute-table',
             specTableElemId: 'fairy-spec-table',
             skuTableElemId: 'fairy-sku-table',
-            rowspan: false,
-            skuIcon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjczN0RFNzU1MTk1RTExRTlBMEQ5OEEwMEM5NDNFOEE4IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjczN0RFNzU2MTk1RTExRTlBMEQ5OEEwMEM5NDNFOEE4Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NzM3REU3NTMxOTVFMTFFOUEwRDk4QTAwQzk0M0U4QTgiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NzM3REU3NTQxOTVFMTFFOUEwRDk4QTAwQzk0M0U4QTgiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5NHmJUAAAA+0lEQVR42pySPwsBYRzH7zk3KIP34CVIKSOrELLJdpuymyzew90kIwMZvACDsCldWZTFn5WQpPN5rlPXlXJ39en7/J57fn+fR9i2rYT5NNM0B2gC3n/6qHBQDMOwZNYg4LOQ3vcQld40/w6lC13Xbd/eHElC3G1JqL4DFWSNprz7BMpAFJ6YkW+jThaosuxAD/rY6R9lCmeq8IAmtKBA1A1OW9YjtIS9QvPYRZkcXo43EzqjF/mDQ5an7ALShTFk4eQOsgFTWeoNKl4nt68J0oYc1LHLbmtDp1IyLgPe4QCuMkIsyAWSuYbs5HD29DML8OTkHR9F2Ef+EWAAdwmkvBAtw94AAAAASUVORK5CYII=',
-            uploadUrl: '',
-            specCreateUrl: '',
-            specCreateParams: {},
-            specDeleteUrl: '',
-            specValueCreateUrl: '',
-            specValueDeleteUrl: '',
-            specDataDelete: false,
-            specData: [],
-            specDataUrl: '',
-            skuData: {},
-            skuDataUrl: '',
+            singleSkuTableConfig: {
+                thead: [
+                    {title: '销售价(元)', icon: 'layui-icon-cols'},
+                    {title: '市场价(元)', icon: 'layui-icon-cols'},
+                    {title: '成本价(元)', icon: 'layui-icon-cols'},
+                    {title: '库存', icon: 'layui-icon-cols'},
+                    {title: '状态', icon: ''},
+                ],
+                tbody: [
+                    {type: 'input', field: 'price', value: '0', verify: 'required|number', reqtext: '销售价不能为空'},
+                    {type: 'input', field: 'market_price', value: '0', verify: 'required|number', reqtext: '市场价不能为空'},
+                    {type: 'input', field: 'cost_price', value: '0', verify: 'required|number', reqtext: '成本价不能为空'},
+                    {type: 'input', field: 'stock', value: '0', verify: 'required|number', reqtext: '库存不能为空'},
+                    {type: 'select', field: 'status', option: [{key: '启用', value: '1'}, {key: '禁用', value: '0'}], verify: 'required', reqtext: '状态不能为空'},
+                ]
+            },
             skuNameType: 0,
             skuNameDelimiter: '-',
-            skuTableConfig: {
+            multipleSkuTableConfig: {
                 thead: [
                     {title: '图片', icon: ''},
                     {title: '销售价(元)', icon: 'layui-icon-cols'},
@@ -180,36 +195,27 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                         reqtext: ''
                     },
                 ]
-            }
+            },
+            uploadUrl: '',
+            attrSpecUrl: '',
+            productTypeUrl: '',
+            specCreateUrl: '',
+            specDeleteUrl: '',
+            specValueCreateUrl: '',
+            specValueDeleteUrl: '',
+            rowspan: false,
+            skuIcon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjczN0RFNzU1MTk1RTExRTlBMEQ5OEEwMEM5NDNFOEE4IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjczN0RFNzU2MTk1RTExRTlBMEQ5OEEwMEM5NDNFOEE4Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6NzM3REU3NTMxOTVFMTFFOUEwRDk4QTAwQzk0M0U4QTgiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6NzM3REU3NTQxOTVFMTFFOUEwRDk4QTAwQzk0M0U4QTgiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5NHmJUAAAA+0lEQVR42pySPwsBYRzH7zk3KIP34CVIKSOrELLJdpuymyzew90kIwMZvACDsCldWZTFn5WQpPN5rlPXlXJ39en7/J57fn+fR9i2rYT5NNM0B2gC3n/6qHBQDMOwZNYg4LOQ3vcQld40/w6lC13Xbd/eHElC3G1JqL4DFWSNprz7BMpAFJ6YkW+jThaosuxAD/rY6R9lCmeq8IAmtKBA1A1OW9YjtIS9QvPYRZkcXo43EzqjF/mDQ5an7ALShTFk4eQOsgFTWeoNKl4nt68J0oYc1LHLbmtDp1IyLgPe4QCuMkIsyAWSuYbs5HD29DML8OTkHR9F2Ef+EWAAdwmkvBAtw94AAAAASUVORK5CYII=',
         };
 
         constructor(options) {
             this.options = $.extend(this.options, options);
-            if (this.options.specDataUrl) {
-                Util.request.get({url: this.options.specDataUrl}, (res) => {
-                    this.options.specData = res.data;
-                    this.renderSpecTable();
-                    if (this.options.skuDataUrl) {
-                        Util.request.get({url: this.options.skuDataUrl}, (res) => {
-                            this.options.skuData = res.data;
-                            this.renderSkuTable();
-                        });
-                    } else {
-                        this.renderSkuTable();
-                    }
-                });
-            } else if (this.options.skuDataUrl) {
-                this.renderSpecTable();
+            if (this.options.skuDataUrl) {
                 Util.request.get({url: this.options.skuDataUrl}, (res) => {
-                    this.options.skuData = res.data;
-                    this.renderSkuTable();
+                    this.data.skuData = res.data;
                 });
-            } else {
-                this.renderSpecTable();
-                this.renderSkuTable();
             }
-
             this.css();
+            this.render();
             this.listen();
         }
 
@@ -256,8 +262,55 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             );
         }
 
+        render() {
+            var mode = String(this.options.mode);
+            this.resetRender();
+            this.renderIsAttribute(mode);
+            mode === '0' ? this.renderSingleSkuTable() : this.renderProductType();
+        }
+
+        resetRender(targets = []) {
+            if (targets.length) {
+                targets.forEach((item) => {
+                    $(`#${item}`).parents('.layui-form-item').replaceWith(`<div id="${item}"></div>`);
+                })
+            } else {
+                $(`#${this.options.isAttributeElemId}`).parents('.layui-form-item').replaceWith(`<div id="${this.options.isAttributeElemId}"></div>`);
+                $(`#${this.options.productTypeElemId}`).parents('.layui-form-item').replaceWith(`<div id="${this.options.productTypeElemId}"></div>`);
+                $(`#${this.options.attributeTableElemId}`).parents('.layui-form-item').replaceWith(`<div id="${this.options.attributeTableElemId}"></div>`);
+                $(`#${this.options.specTableElemId}`).parents('.layui-form-item').replaceWith(`<div id="${this.options.specTableElemId}"></div>`);
+                $(`#${this.options.skuTableElemId}`).parents('.layui-form-item').replaceWith(`<div id="${this.options.skuTableElemId}"></div>`);
+            }
+        }
+
         listen() {
             var that = this;
+
+            /**
+             * 监听规格类型选择
+             */
+            form.on('radio(fairy-is-attribute)', function (data) {
+                that.options.mode = data.value;
+                that.render();
+            });
+
+            /**
+             * 监听商品类型选择
+             */
+            form.on('select(fairy-product-type)', function (data) {
+                that.data.productTypeId = data.value;
+                if (!data.value) {
+                    that.resetRender([that.options.attributeTableElemId, that.options.specTableElemId, that.options.skuTableElemId]);
+                } else {
+                    Util.request.get({url: that.options.attrSpecUrl, data: {product_type_id: data.value}}, (res) => {
+                        that.data.attributeData = res.data.attribute;
+                        that.data.specData = res.data.spec;
+                        that.renderAttributeTable();
+                        that.renderSpecTable();
+                        that.renderMultipleSkuTable();
+                    });
+                }
+            });
 
             /**
              * 监听所选规格值的变化
@@ -265,20 +318,22 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             form.on('checkbox(fairy-spec-filter)', function (data) {
                 var specData = [];
                 $.each($(`#${that.options.specTableElemId} tbody tr`), function () {
-                    var child = [];
+                    var options = [], value = [];
                     $.each($(this).find('input[type=checkbox]'), function () {
-                        child.push({id: $(this).val(), title: $(this).attr('title'), checked: $(this).is(':checked')});
+                        $(this).is(':checked') && value.push($(this).val());
+                        options.push({id: $(this).val(), title: $(this).attr('title')});
                     });
-                    var specItem = {
+                    specData.push({
                         id: $(this).find('td').eq(0).data('id'),
                         title: $(this).find('td').eq(0).text(),
-                        child: child
-                    };
-                    specData.push(specItem);
+                        options: options,
+                        value: value
+                    });
                 });
-                that.options.specData = specData;
-                that.options.skuData = $.extend(that.options.skuData, that.getFormSkuData());
-                that.renderSkuTable();
+                that.data.specData = specData;
+                that.data.skuData = $.extend(that.data.skuData, that.getFormSkuData());
+                that.resetRender([that.options.skuTableElemId]);
+                that.renderMultipleSkuTable();
             });
 
             /**
@@ -303,9 +358,10 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             $(document).on('click', `#${this.options.specTableElemId} .fairy-spec-create`, function () {
                 layer.prompt({title: '规格'}, function (value, index, elem) {
                     Util.request.post(
-                        {url: that.options.specCreateUrl, data: {title: value, ...that.options.specCreateParams}},
+                        {url: that.options.specCreateUrl, data: {title: value, product_type_id: that.data.productTypeId}},
                         function (res) {
-                            that.options.specData.push({id: res.data.id, title: value, child: []});
+                            that.data.specData.push({id: res.data.id, title: value, options: [], value: []});
+                            that.resetRender([that.options.specTableElemId]);
                             that.renderSpecTable();
                         });
                     Util.msg.close(index);
@@ -321,11 +377,12 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     Util.request.post(
                         {url: that.options.specValueCreateUrl, data: {spec_id: specId, title: value}},
                         function (res) {
-                            that.options.specData.forEach(function (v, i) {
+                            that.data.specData.forEach(function (v, i) {
                                 if (v.id == specId) {
-                                    v.child.push({id: res.data.id, title: value, checked: false});
+                                    v.options.push({id: res.data.id, title: value});
                                 }
                             });
+                            that.resetRender([that.options.specTableElemId]);
                             that.renderSpecTable();
                         });
                     Util.msg.close(index);
@@ -340,32 +397,38 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     if (that.options.specDeleteUrl) {
                         Util.request.post({
                             url: that.options.specDeleteUrl,
-                            data: {id: that.options.specData[$(this).data('spec-index')]['id']}
+                            data: {id: that.data.specData[$(this).data('spec-index')]['id']}
                         }, function (res) {
-                            that.options.specData.splice($(this).data('spec-index'), 1);
+                            that.data.specData.splice($(this).data('spec-index'), 1);
+                            that.resetRender([that.options.specTableElemId, that.options.skuTableElemId]);
                             that.renderSpecTable();
-                            that.renderSkuTable();
+                            that.renderMultipleSkuTable();
                         });
                     } else {
-                        that.options.specData.splice($(this).data('spec-index'), 1);
+                        that.data.specData.splice($(this).data('spec-index'), 1);
+                        that.resetRender([that.options.specTableElemId, that.options.skuTableElemId]);
                         that.renderSpecTable();
-                        that.renderSkuTable();
+                        that.renderMultipleSkuTable();
                     }
                 } else if (typeof $(this).attr('data-spec-value-index') !== "undefined") {
                     var [i, ii] = $(this).data('spec-value-index').split('-');
                     if (that.options.specValueDeleteUrl) {
                         Util.request.post({
                             url: that.options.specValueDeleteUrl,
-                            data: {id: that.options.specData[i].child[ii].id}
+                            data: {id: that.data.specData[i].options[ii].id}
                         }, function (res) {
-                            that.options.specData[i].child.splice(ii, 1);
+                            that.data.specData[i].value.splice(that.data.specData[i].value.indexOf(that.data.specData[i].options[ii].id), 1);
+                            that.data.specData[i].options.splice(ii, 1);
+                            that.resetRender([that.options.specTableElemId, that.options.skuTableElemId]);
                             that.renderSpecTable();
-                            that.renderSkuTable();
+                            that.renderMultipleSkuTable();
                         });
                     } else {
-                        that.options.specData[i].child.splice(ii, 1);
+                        that.data.specData[i].value.splice(that.data.specData[i].value.indexOf(that.data.specData[i].options[ii].id), 1);
+                        that.data.specData[i].options.splice(ii, 1);
+                        that.resetRender([that.options.specTableElemId, that.options.skuTableElemId]);
                         that.renderSpecTable();
-                        that.renderSkuTable();
+                        that.renderMultipleSkuTable();
                     }
                 }
             });
@@ -374,7 +437,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
              * 监听规格表是否开启删除
              */
             form.on('checkbox(fairy-spec-delete-filter)', function (data) {
-                that.options.specDataDelete = data.elem.checked;
+                that.data.specDataDelete = data.elem.checked;
                 if (data.elem.checked) {
                     $(`#${that.options.specTableElemId} tbody tr i.layui-icon-delete`).removeClass('layui-hide');
                 } else {
@@ -396,6 +459,76 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             })
         }
 
+        renderFormItem(label, content, target) {
+            var html = '';
+            html += '<div class="layui-form-item">';
+            html += `<label class="layui-form-label">${label ? label + ':' : ''}</label>`;
+            html += '<div class="layui-input-block">';
+            html += content;
+            html += '</div>';
+            html += '</div>';
+            $(`#${target}`).replaceWith(html);
+            form.render();
+        }
+
+        renderIsAttribute(type) {
+            var html = '';
+            html += `<input type="radio" name="is_attribute" title="统一规格" value="0" lay-filter="fairy-is-attribute" ${type == '0' ? 'checked' : ''}>`;
+            html += `<input type="radio" name="is_attribute" title="多规格" value="1" lay-filter="fairy-is-attribute" ${type == '1' ? 'checked' : ''}>`;
+            this.renderFormItem('商品规格', html, this.options.isAttributeElemId);
+        }
+
+        renderProductType() {
+            Util.request.get({url: this.options.productTypeUrl}, (res) => {
+                var html = '';
+                html += `<select name="product_type" lay-filter="fairy-product-type" id="${this.options.productTypeElemId}">`;
+                html += '<option></option>';
+                res.data.forEach((item) => {
+                    html += `<option value="${item.id}">${item.title}</option>`;
+                });
+                html += '</select>';
+                this.renderFormItem('商品类型', html, this.options.productTypeElemId);
+            });
+        }
+
+        /**
+         * 渲染属性表
+         */
+        renderAttributeTable() {
+            var table = '';
+            table += `<table class="layui-table" id="${this.options.attributeTableElemId}"><thead><th>属性名</th> <th>属性值</th></thead><tbody>`;
+            this.data.attributeData.forEach((item) => {
+                table += '<tr>';
+                table += '<td>' + item.title + '</td>';
+                switch (item.type) {
+                    case '1':
+                        table += `<td><input class="layui-input" name="attribute_value[${item.id}]" value="${item.value}"></td>`;
+                        break;
+                    case '2':
+                        table += '<td>';
+                        item.options.forEach((option) => {
+                            table += `<input type="radio" name="attribute_value[${item.id}]" title="${option}" value="${option}" ${option === item.value ? 'checked' : ''}>`;
+                        });
+                        table += '</td>';
+                        break;
+                    case '3':
+                        var checkedOptions = item.value.split(',');
+                        table += '<td>';
+                        item.options.forEach((option) => {
+                            table += `<input type="checkbox" name="attribute_value[${item.id}][]" title="${option}" value="${option}" ${checkedOptions.includes(option) ? 'checked' : ''}>`;
+                        });
+                        table += '</td>';
+                        break;
+                }
+                table += '</tr>';
+            });
+            table += '</tbody>';
+            table += '</table>';
+
+            this.renderFormItem('商品属性', table, this.options.attributeTableElemId);
+        }
+
+
         /**
          * 渲染规格表
          */
@@ -403,12 +536,12 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             var that = this,
                 table = `<table class="layui-table" id="${this.options.specTableElemId}"><thead><tr><th>规格名</th><th>规格值</th></tr></thead><colgroup><col width="140"></colgroup><tbody>`;
 
-            $.each(this.options.specData, function (index, item) {
+            $.each(this.data.specData, function (index, item) {
                 table += `<tr data-id="${item.id}">`;
-                table += `<td data-id="${item.id}">${item.title} <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.options.specDataDelete ? '' : 'layui-hide'}" data-spec-index="${index}"></i></td>`;
+                table += `<td data-id="${item.id}">${item.title} <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.data.specDataDelete ? '' : 'layui-hide'}" data-spec-index="${index}"></i></td>`;
                 table += '<td>';
-                $.each(item.child, function (key, value) {
-                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${value.checked ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.options.specDataDelete ? '' : 'layui-hide'}" data-spec-value-index="${index}-${key}"></i> `;
+                $.each(item.options, function (key, value) {
+                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${item.value.includes(value.id) ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.data.specDataDelete ? '' : 'layui-hide'}" data-spec-value-index="${index}-${key}"></i> `;
                 });
                 that.options.specValueCreateUrl && (table += '<div class="fairy-spec-value-create"><i class="layui-icon layui-icon-addition"></i>规格值</div>');
                 table += '</td>';
@@ -417,7 +550,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             table += '</tbody>';
 
             table += '<tfoot><tr><td colspan="2">';
-            table += `<input type="checkbox" title="开启删除" lay-skin="primary" lay-filter="fairy-spec-delete-filter" ${that.options.specDataDelete ? 'checked' : ''}/>`;
+            table += `<input type="checkbox" title="开启删除" lay-skin="primary" lay-filter="fairy-spec-delete-filter" ${that.data.specDataDelete ? 'checked' : ''}/>`;
             if (this.options.specCreateUrl) {
                 table += `<div class="fairy-spec-create"><i class="layui-icon layui-icon-addition"></i>规格</div>`;
             }
@@ -425,9 +558,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 
             table += '</table>';
 
-            $(`#${this.options.specTableElemId}`).replaceWith(table);
-
-            form.render();
+            this.renderFormItem('商品规格', table, this.options.specTableElemId);
 
             /**
              * 拖拽
@@ -438,33 +569,73 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     //获取拖动后的排序
                     var sortArr = sortableObj.toArray(),
                         sortSpecData = [];
-                    this.options.specData.forEach((item) => {
+                    this.data.specData.forEach((item) => {
                         sortSpecData[sortArr.indexOf(String(item.id))] = item;
                     });
-                    this.options.specData = sortSpecData;
-                    this.renderSkuTable();
+                    this.data.specData = sortSpecData;
+                    this.resetRender([this.options.skuTableElemId]);
+                    this.renderMultipleSkuTable();
                 },
             });
+        }
+
+        renderSingleSkuTable() {
+            var that = this,
+                table = `<table class="layui-table" id="${this.options.skuTableElemId}">`;
+            table += '<thead>';
+            table += '<tr>';
+            this.options.singleSkuTableConfig.thead.forEach((item) => {
+                table += `<th>${item.title}</th>`;
+            });
+            table += '</tr>';
+            table += '</thead>';
+
+            table += '<tbody>';
+            table += '<tr>';
+            that.options.singleSkuTableConfig.tbody.forEach(function (item) {
+                switch (item.type) {
+                    case "select":
+                        table += '<td>';
+                        table += `<select name="${item.field}" lay-verify="${item.verify}" lay-reqtext="${item.reqtext}">`;
+                        item.option.forEach(function (o) {
+                            table += `<option value="${o.value}" ${that.data.skuData[item.field] == o.value ? 'selected' : ''}>${o.key}</option>`;
+                        });
+                        table += '</select>';
+                        table += '</td>';
+                        break;
+                    case "input":
+                    default:
+                        table += '<td>';
+                        table += `<input type="text" name="${item.field}" value="${that.data.skuData[item.field] ? that.data.skuData[item.field] : item.value}" class="layui-input" lay-verify="${item.verify}" lay-reqtext="${item.reqtext}">`;
+                        table += '</td>';
+                        break;
+                }
+            });
+            table += '</tr>';
+            table += '<tbody>';
+            table += '</table>';
+
+            this.renderFormItem('', table, this.options.skuTableElemId);
         }
 
         /**
          * 渲染sku表
          */
-        renderSkuTable() {
+        renderMultipleSkuTable() {
             var that = this, table = `<table class="layui-table" id="${this.options.skuTableElemId}">`;
 
             if ($(`#${this.options.specTableElemId} tbody input[type=checkbox]:checked`).length) {
                 var prependThead = [], prependTbody = [];
-                $.each(this.options.specData, function (index, item) {
-                    var isShow = item.child.some(function (value, index, array) {
-                        return value.checked;
+                $.each(this.data.specData, function (index, item) {
+                    var isShow = item.options.some(function (option, index, array) {
+                        return item.value.includes(option.id);
                     });
                     if (isShow) {
                         prependThead.push(item.title);
                         var prependTbodyItem = [];
-                        $.each(item.child, function (key, value) {
-                            if (value.checked) {
-                                prependTbodyItem.push({id: value.id, title: value.title});
+                        $.each(item.options, function (key, option) {
+                            if (item.value.includes(option.id)) {
+                                prependTbodyItem.push({id: option.id, title: option.title});
                             }
                         });
                         prependTbody.push(prependTbodyItem);
@@ -481,7 +652,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                         return '<th class="fairy-spec-name">' + t + '</th>';
                     }).join('');
 
-                    this.options.skuTableConfig.thead.forEach(function (item) {
+                    this.options.multipleSkuTableConfig.thead.forEach(function (item) {
                         theadTr += '<th>' + item.title + (item.icon ? ' <i class="layui-icon ' + item.icon + '"></i>' : '') + '</th>';
                     });
 
@@ -529,21 +700,21 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                         }
                     }).join('');
 
-                    that.options.skuTableConfig.tbody.forEach(function (c) {
+                    that.options.multipleSkuTableConfig.tbody.forEach(function (c) {
                         switch (c.type) {
                             case "image":
-                                tr += '<td><input type="hidden" name="' + that.makeSkuName(item, c) + '" value="' + (that.options.skuData[that.makeSkuName(item, c)] ? that.options.skuData[that.makeSkuName(item, c)] : c.value) + '" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '"><img class="fairy-sku-img" src="' + (that.options.skuData[that.makeSkuName(item, c)] ? that.options.skuData[that.makeSkuName(item, c)] : that.options.skuIcon) + '" alt="' + c.field + '图片"></td>';
+                                tr += '<td><input type="hidden" name="' + that.makeSkuName(item, c) + '" value="' + (that.data.skuData[that.makeSkuName(item, c)] ? that.data.skuData[that.makeSkuName(item, c)] : c.value) + '" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '"><img class="fairy-sku-img" src="' + (that.data.skuData[that.makeSkuName(item, c)] ? that.data.skuData[that.makeSkuName(item, c)] : that.options.skuIcon) + '" alt="' + c.field + '图片"></td>';
                                 break;
                             case "select":
                                 tr += '<td><select name="' + that.makeSkuName(item, c) + '" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '">';
                                 c.option.forEach(function (o) {
-                                    tr += '<option value="' + o.value + '" ' + (that.options.skuData[that.makeSkuName(item, c)] == o.value ? 'selected' : '') + '>' + o.key + '</option>';
+                                    tr += '<option value="' + o.value + '" ' + (that.data.skuData[that.makeSkuName(item, c)] == o.value ? 'selected' : '') + '>' + o.key + '</option>';
                                 });
                                 tr += '</select></td>';
                                 break;
                             case "input":
                             default:
-                                tr += '<td><input type="text" name="' + that.makeSkuName(item, c) + '" value="' + (that.options.skuData[that.makeSkuName(item, c)] ? that.options.skuData[that.makeSkuName(item, c)] : c.value) + '" class="layui-input" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '"></td>';
+                                tr += '<td><input type="text" name="' + that.makeSkuName(item, c) + '" value="' + (that.data.skuData[that.makeSkuName(item, c)] ? that.data.skuData[that.makeSkuName(item, c)] : c.value) + '" class="layui-input" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '"></td>';
                                 break;
                         }
                     });
@@ -564,9 +735,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 
             table += '</table>';
 
-            $(`#${that.options.skuTableElemId}`).replaceWith(table);
-
-            form.render();
+            this.renderFormItem('商品库存', table, this.options.skuTableElemId);
 
             upload.render({
                 elem: '.fairy-sku-img',
@@ -593,10 +762,6 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             return 'skus[' + (this.options.skuNameType === 0 ? sku.id : sku.title) + '][' + conf.field + ']';
         }
 
-        getSpecData() {
-            return this.options.specData;
-        }
-
         getFormFilter() {
             var fariyForm = $('form.fairy-form');
             if (!fariyForm.attr('lay-filter')) {
@@ -616,6 +781,9 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             return skuData;
         }
 
+        getMode() {
+            return this.options.mode;
+        }
     }
 
     exports(MOD_NAME, {
