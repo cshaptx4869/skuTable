@@ -299,10 +299,13 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
              */
             form.on('select(fairy-product-type)', function (data) {
                 that.data.productTypeId = data.value;
-                if (!data.value) {
+                if (data.value === '') {
                     that.resetRender([that.options.attributeTableElemId, that.options.specTableElemId, that.options.skuTableElemId]);
+                    that.data.attributeData = [];
+                    that.data.specData = [];
                 } else {
                     Util.request.get({url: that.options.attrSpecUrl, data: {product_type_id: data.value}}, (res) => {
+                        that.resetRender([that.options.attributeTableElemId, that.options.specTableElemId, that.options.skuTableElemId]);
                         that.data.attributeData = res.data.attribute;
                         that.data.specData = res.data.spec;
                         that.renderAttributeTable();
