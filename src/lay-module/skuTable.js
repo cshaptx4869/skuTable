@@ -396,42 +396,29 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
              * 监听删除规格/规格值
              */
             $(document).on('click', `#${this.options.specTableElemId} i.layui-icon-delete`, function () {
-                if (typeof $(this).attr('data-spec-index') !== "undefined") {
+                if (typeof $(this).attr('data-spec-id') !== "undefined") {
+                    var specId = $(this).attr('data-spec-id');
                     if (that.options.specDeleteUrl) {
                         Util.request.post({
                             url: that.options.specDeleteUrl,
-                            data: {id: that.data.specData[$(this).data('spec-index')]['id']}
+                            data: {id: specId}
                         }, function (res) {
-                            that.data.specData.splice($(this).data('spec-index'), 1);
-                            that.resetRender([that.options.specTableElemId, that.options.skuTableElemId]);
-                            that.renderSpecTable();
-                            that.renderMultipleSkuTable();
+                            that.deleteSpec(specId);
                         });
                     } else {
-                        that.data.specData.splice($(this).data('spec-index'), 1);
-                        that.resetRender([that.options.specTableElemId, that.options.skuTableElemId]);
-                        that.renderSpecTable();
-                        that.renderMultipleSkuTable();
+                        that.deleteSpec(specId);
                     }
-                } else if (typeof $(this).attr('data-spec-value-index') !== "undefined") {
-                    var [i, ii] = $(this).data('spec-value-index').split('-');
+                } else if (typeof $(this).attr('data-spec-value-id') !== "undefined") {
+                    var specValueId = $(this).attr('data-spec-value-id');
                     if (that.options.specValueDeleteUrl) {
                         Util.request.post({
                             url: that.options.specValueDeleteUrl,
-                            data: {id: that.data.specData[i].options[ii].id}
+                            data: {id: specValueId}
                         }, function (res) {
-                            that.data.specData[i].value.splice(that.data.specData[i].value.indexOf(that.data.specData[i].options[ii].id), 1);
-                            that.data.specData[i].options.splice(ii, 1);
-                            that.resetRender([that.options.specTableElemId, that.options.skuTableElemId]);
-                            that.renderSpecTable();
-                            that.renderMultipleSkuTable();
+                            that.deleteSpecValue(specValueId);
                         });
                     } else {
-                        that.data.specData[i].value.splice(that.data.specData[i].value.indexOf(that.data.specData[i].options[ii].id), 1);
-                        that.data.specData[i].options.splice(ii, 1);
-                        that.resetRender([that.options.specTableElemId, that.options.skuTableElemId]);
-                        that.renderSpecTable();
-                        that.renderMultipleSkuTable();
+                        that.deleteSpecValue(specValueId)
                     }
                 }
             });
@@ -460,6 +447,33 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             }).on('mouseleave', '.fairy-sku-img', function () {
                 layer.close(imgLayerIndex);
             })
+        }
+
+        deleteSpec(specId) {
+            this.data.specData.forEach((item, index) => {
+                if (item.id == specId) {
+                    this.data.specData.splice(index, 1);
+                }
+            });
+            this.resetRender([this.options.specTableElemId, this.options.skuTableElemId]);
+            this.renderSpecTable();
+            this.renderMultipleSkuTable();
+        }
+
+        deleteSpecValue(specValueId) {
+            this.data.specData.forEach((item, index) => {
+                item.options.forEach((value, key) => {
+                    if (value.id == specValueId) {
+                        if (item.value.includes(specValueId)) {
+                            item.value.splice(item.value.indexOf(specValueId), 1);
+                        }
+                        item.options.splice(key, 1);
+                    }
+                })
+            });
+            this.resetRender([this.options.specTableElemId, this.options.skuTableElemId]);
+            this.renderSpecTable();
+            this.renderMultipleSkuTable();
         }
 
         renderFormItem(label, content, target) {
@@ -541,10 +555,10 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 
             $.each(this.data.specData, function (index, item) {
                 table += `<tr data-id="${item.id}">`;
-                table += `<td data-id="${item.id}">${item.title} <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.data.specDataDelete ? '' : 'layui-hide'}" data-spec-index="${index}"></i></td>`;
+                table += `<td data-id="${item.id}">${item.title} <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.data.specDataDelete ? '' : 'layui-hide'}" data-spec-id="${item.id}"></i></td>`;
                 table += '<td>';
                 $.each(item.options, function (key, value) {
-                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${item.value.includes(value.id) ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.data.specDataDelete ? '' : 'layui-hide'}" data-spec-value-index="${index}-${key}"></i> `;
+                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${item.value.includes(value.id) ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.data.specDataDelete ? '' : 'layui-hide'}" data-spec-value-id="${value.id}"></i> `;
                 });
                 that.options.specValueCreateUrl && (table += '<div class="fairy-spec-value-create"><i class="layui-icon layui-icon-addition"></i>规格值</div>');
                 table += '</td>';
