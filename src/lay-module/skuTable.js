@@ -143,6 +143,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             attributeData: [],
             specData: [],
             skuData: {},
+            productId: '',
             productTypeId: '',
             specDataDelete: false,
         };
@@ -209,8 +210,14 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 
         constructor(options) {
             this.options = $.extend(this.options, options);
+            if (this.options.productId) {
+                this.data.productId = this.options.productId;
+            }
+            if (this.options.productTypeId) {
+                this.data.productTypeId = this.options.productTypeId;
+            }
             if (this.options.skuDataUrl) {
-                Util.request.get({url: this.options.skuDataUrl}, (res) => {
+                Util.request.get({url: this.options.skuDataUrl, data: {product_id: this.data.productId}}, (res) => {
                     this.data.skuData = res.data;
                 });
             }
@@ -501,10 +508,19 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                 html += `<select name="product_type" lay-filter="fairy-product-type" id="${this.options.productTypeElemId}">`;
                 html += '<option></option>';
                 res.data.forEach((item) => {
-                    html += `<option value="${item.id}">${item.title}</option>`;
+                    html += `<option value="${item.id}" ${this.data.productTypeId == item.id ? 'selected' : ''}>${item.title}</option>`;
                 });
                 html += '</select>';
                 this.renderFormItem('商品类型', html, this.options.productTypeElemId);
+                if (this.data.productTypeId) {
+                    Util.request.get({url: this.options.attrSpecUrl, data: {product_type_id: this.data.productTypeId}}, (res) => {
+                        this.data.attributeData = res.data.attribute;
+                        this.data.specData = res.data.spec;
+                        this.renderAttributeTable();
+                        this.renderSpecTable();
+                        this.renderMultipleSkuTable();
+                    });
+                }
             });
         }
 

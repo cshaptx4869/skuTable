@@ -65,8 +65,6 @@
             specValueCreateUrl: './json/specValueCreate.json',
             //删除规格值接口
             specValueDeleteUrl: './json/specValueDelete.json',
-            //sku数据接口
-            skuDataUrl: './json/skuData.json',
             //单规格SKU表配置
             singleSkuTableConfig: {
                 thead: [
@@ -109,6 +107,13 @@
                     },
                 ]
             },
+            // ========================================== 回显时相关配置参数 ========================================== //
+            //商品id
+            productId: 1,
+            //商品类型id
+            productTypeId: 1,
+            //sku数据接口
+            skuDataUrl: './json/skuData.json',
         });
 
         form.on('submit(submit)', function (data) {
