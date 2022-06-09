@@ -2,7 +2,7 @@
 
 ## 简介
 
-基于 Layui 的商品规格组件。[v1.x](https://gitee.com/cshaptx4869/sku-table/tree/v1/)版本不再维护，推荐使用[v2.x](https://gitee.com/cshaptx4869/sku-table/tree/v2/)版本。
+基于 Layui 的商品规格组件。[v1.x](https://gitee.com/cshaptx4869/sku-table/tree/v1/)版本地址(数据表简单些)，[v2.x](https://gitee.com/cshaptx4869/sku-table/tree/v2/)版本地址(数据表复杂些)。
 
 **主要功能：**
 
