@@ -363,11 +363,13 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             $(document).on('click', `#${this.options.specTableElemId} i.layui-icon-delete`, function () {
                 if (typeof $(this).attr('data-spec-index') !== "undefined") {
                     that.options.specData.splice($(this).data('spec-index'), 1);
+                    that.resetRender([that.options.specTableElemId, that.options.skuTableElemId]);
                     that.renderSpecTable();
                     that.renderMultipleSkuTable();
                 } else if (typeof $(this).attr('data-spec-value-index') !== "undefined") {
                     var [i, ii] = $(this).data('spec-value-index').split('-');
                     that.options.specData[i].child.splice(ii, 1);
+                    that.resetRender([that.options.specTableElemId, that.options.skuTableElemId]);
                     that.renderSpecTable();
                     that.renderMultipleSkuTable();
                 }
