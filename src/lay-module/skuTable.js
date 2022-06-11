@@ -231,11 +231,13 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 
         css() {
             $('head').append(`<style>
-                ${this.options.sortable ? `#${this.options.specTableElemId} tbody tr {cursor: move;transition:unset;-webkit-transition:unset;}` : ''};
-                
+                ${this.options.sortable ? `#${this.options.specTableElemId} tbody tr {cursor: move;transition:unset;-webkit-transition:unset;}` : ''}
+                #${this.options.specTableElemId} tbody tr td:first-child > i.layui-icon-delete {
+                  margin-left:3px;
+                }
                 #${this.options.specTableElemId} tbody tr td:last-child > i.layui-icon-delete {
                   margin-right:15px;
-                  margin-left:-12px;
+                  margin-left:-7px;
                   vertical-align: top;
                 }
                 #${this.options.specTableElemId} tbody tr td div.fairy-spec-value-create,
@@ -504,10 +506,10 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                 table = `<table class="layui-table" id="${this.options.specTableElemId}"><thead><tr><th>规格名</th><th>规格值</th></tr></thead><colgroup><col width="140"></colgroup><tbody>`;
             $.each(this.options.specData, function (index, item) {
                 table += that.options.sortable ? `<tr data-id="${item.id}">` : '<tr>';
-                table += `<td data-spec-id="${item.id}">${item.title} <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.options.specDataDelete ? '' : 'layui-hide'}" data-spec-index="${index}"></i></td>`;
+                table += `<td data-spec-id="${item.id}">${item.title}<i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.options.specDataDelete ? '' : 'layui-hide'}" data-spec-index="${index}"></i></td>`;
                 table += '<td>';
                 $.each(item.child, function (key, value) {
-                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${value.checked ? 'checked' : ''} /> <i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.options.specDataDelete ? '' : 'layui-hide'}" data-spec-value-index="${index}-${key}"></i> `;
+                    table += `<input type="checkbox" title="${value.title}" lay-filter="fairy-spec-filter" value="${value.id}" ${value.checked ? 'checked' : ''} /><i class="layui-icon layui-icon-delete layui-anim layui-anim-scale ${that.options.specDataDelete ? '' : 'layui-hide'}" data-spec-value-index="${index}-${key}"></i> `;
                 });
                 table += '<div class="fairy-spec-value-create"><i class="layui-icon layui-icon-addition"></i>规格值</div>'
                 table += '</td>';

@@ -197,9 +197,9 @@ CREATE TABLE `product_sku` (
             //sku表相同属性值是否合并行
             rowspan: true,
             //请求成功返回状态码值
-            requestSuccessCode: 1,
+            requestSuccessCode: 200,
             //上传接口地址
-            //接口要求返回格式为 {"code": 200, "data": {"url": "xxx"}, "msg": ""}
+            //接口要求返回格式参考 upload.json
             uploadUrl: './json/upload.json',
             //统一规格配置项
             singleSkuTableConfig: {
