@@ -325,7 +325,6 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
              * 监听添加规格
              */
             $(document).on('click', `#${this.options.specTableElemId} .fairy-spec-create`, function () {
-                console.log(JSON.stringify(that.getSpecData(), 4))
                 layer.prompt({title: '规格'}, function (value, index, elem) {
                     var specTitleArr = [];
                     $.each(that.options.specData, function (k, v) {
@@ -471,7 +470,6 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 
             table += '<tbody>';
             table += '<tr>';
-            console.log(this.options.skuData);
             that.options.singleSkuTableConfig.tbody.forEach(function (item) {
                 switch (item.type) {
                     case "select":
@@ -495,7 +493,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             table += '<tbody>';
             table += '</table>';
 
-            this.renderFormItem('', table, this.options.skuTableElemId);
+            this.renderFormItem('SKU', table, this.options.skuTableElemId);
         }
 
         /**
@@ -665,25 +663,28 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
 
             this.renderFormItem('SKU', table, this.options.skuTableElemId);
 
-            upload.render({
-                elem: '.fairy-sku-img',
-                url: this.options.uploadUrl,
-                exts: 'png|jpg|ico|jpeg|gif',
-                accept: 'images',
-                acceptMime: 'image/*',
-                multiple: false,
-                done: function (res) {
-                    if (res.code === that.options.requestSuccessCode) {
-                        var url = res.data.url;
-                        $(this.item).attr('src', url).prev().val(url);
-                        Util.msg.success(res.msg);
-                    } else {
-                        var msg = res.msg == undefined ? '返回数据格式有误' : res.msg;
-                        Util.msg.error(msg);
+            //上传
+            if (this.options.uploadUrl) {
+                upload.render({
+                    elem: '.fairy-sku-img',
+                    url: this.options.uploadUrl,
+                    exts: 'png|jpg|ico|jpeg|gif',
+                    accept: 'images',
+                    acceptMime: 'image/*',
+                    multiple: false,
+                    done: function (res) {
+                        if (res.code === that.options.requestSuccessCode) {
+                            var url = res.data.url;
+                            $(this.item).attr('src', url).prev().val(url);
+                            Util.msg.success(res.msg);
+                        } else {
+                            var msg = res.msg == undefined ? '返回数据格式有误' : res.msg;
+                            Util.msg.error(msg);
+                        }
+                        return false;
                     }
-                    return false;
-                }
-            });
+                });
+            }
         }
 
         /**
