@@ -16,7 +16,10 @@
 
 ## 效果
 
-[在线演示](https://www.jq22.com/yanshi23988)
+在线体验地址：
+
+- [JQ22](https://www.jq22.com/yanshi23988) 
+- [GitHub](https://cshaptx4869.github.io/mypage/skuTable/v1/skuTable.html)（优先更新!）
 
 ![](https://s3.bmp.ovh/imgs/2021/12/ca228dbe3f5caa9c.png)
 
