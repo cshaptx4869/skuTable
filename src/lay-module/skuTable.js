@@ -484,7 +484,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                     case "input":
                     default:
                         table += '<td>';
-                        table += `<input type="text" name="${item.field}" value="${that.options.skuData[item.field] ? that.options.skuData[item.field] : item.value}" class="layui-input" lay-verify="${item.verify}" lay-reqtext="${item.reqtext}">`;
+                        table += `<input type="text" name="${item.field}" value="${that.options.skuData[item.field] !== undefined ? that.options.skuData[item.field] : item.value}" class="layui-input" lay-verify="${item.verify}" lay-reqtext="${item.reqtext}">`;
                         table += '</td>';
                         break;
                 }
@@ -640,7 +640,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
                                 break;
                             case "input":
                             default:
-                                tr += '<td><input type="text" name="' + that.makeSkuName(item, c) + '" value="' + (that.options.skuData[that.makeSkuName(item, c)] ? that.options.skuData[that.makeSkuName(item, c)] : c.value) + '" class="layui-input" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '"></td>';
+                                tr += '<td><input type="text" name="' + that.makeSkuName(item, c) + '" value="' + (that.options.skuData[that.makeSkuName(item, c)] !== undefined ? that.options.skuData[that.makeSkuName(item, c)] : c.value) + '" class="layui-input" lay-verify="' + c.verify + '" lay-reqtext="' + c.reqtext + '"></td>';
                                 break;
                         }
                     });
