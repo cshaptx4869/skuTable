@@ -306,9 +306,21 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             });
 
             /**
+             * 监听规格表是否开启删除
+             */
+            form.on('checkbox(fairy-spec-delete-filter)', function (data) {
+                that.options.specDataDelete = data.elem.checked;
+                if (data.elem.checked) {
+                    $(`#${that.options.specTableElemId} tbody tr i.layui-icon-delete`).removeClass('layui-hide');
+                } else {
+                    $(`#${that.options.specTableElemId} tbody tr i.layui-icon-delete`).addClass('layui-hide')
+                }
+            });
+
+            /**
              * 监听批量赋值
              */
-            $(document).on('click', `#${this.options.skuTableElemId} thead tr th i`, function () {
+            $(document).off('click', `#${this.options.skuTableElemId} thead tr th i`).on('click', `#${this.options.skuTableElemId} thead tr th i`, function () {
                 var thisI = this;
                 Util.msg.prompt({title: $(thisI).parent().text().trim() + '批量赋值'}, function (value, index, elem) {
                     $.each($(`#${that.options.skuTableElemId} tbody tr`), function () {
@@ -324,7 +336,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             /**
              * 监听添加规格
              */
-            $(document).on('click', `#${this.options.specTableElemId} .fairy-spec-create`, function () {
+            $(document).off('click', `#${this.options.specTableElemId} .fairy-spec-create`).on('click', `#${this.options.specTableElemId} .fairy-spec-create`, function () {
                 layer.prompt({title: '规格'}, function (value, index, elem) {
                     var specTitleArr = [];
                     $.each(that.options.specData, function (k, v) {
@@ -344,7 +356,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             /**
              * 监听添加规格值
              */
-            $(document).on('click', `#${this.options.specTableElemId} .fairy-spec-value-create`, function () {
+            $(document).off('click', `#${this.options.specTableElemId} .fairy-spec-value-create`).on('click', `#${this.options.specTableElemId} .fairy-spec-value-create`, function () {
                 var specId = $(this).parent('td').prev().data('spec-id');
                 layer.prompt({title: '规格值'}, function (value, index, elem) {
                     that.options.specData.forEach(function (v, i) {
@@ -361,7 +373,7 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             /**
              * 监听删除规格/规格值
              */
-            $(document).on('click', `#${this.options.specTableElemId} i.layui-icon-delete`, function () {
+            $(document).off('click', `#${this.options.specTableElemId} i.layui-icon-delete`).on('click', `#${this.options.specTableElemId} i.layui-icon-delete`, function () {
                 if (typeof $(this).attr('data-spec-index') !== "undefined") {
                     that.options.specData.splice($(this).data('spec-index'), 1);
                     that.resetRender([that.options.specTableElemId, that.options.skuTableElemId]);
@@ -377,27 +389,16 @@ layui.define(['jquery', 'form', 'upload', 'layer', 'sortable'], function (export
             });
 
             /**
-             * 监听规格表是否开启删除
-             */
-            form.on('checkbox(fairy-spec-delete-filter)', function (data) {
-                that.options.specDataDelete = data.elem.checked;
-                if (data.elem.checked) {
-                    $(`#${that.options.specTableElemId} tbody tr i.layui-icon-delete`).removeClass('layui-hide');
-                } else {
-                    $(`#${that.options.specTableElemId} tbody tr i.layui-icon-delete`).addClass('layui-hide')
-                }
-            });
-
-            /**
              * 图片移入放大/移出恢复
              */
             var imgLayerIndex = null;
-            $(document).on('mouseenter', '.fairy-sku-img', function () {
+            $(document).off('mouseenter', '.fairy-sku-img').on('mouseenter', '.fairy-sku-img', function () {
                 imgLayerIndex = layer.tips('<img src="' + $(this).attr('src') + '" style="max-width:200px;"  alt=""/>', this, {
                     tips: [2, 'rgba(41,41,41,.5)'],
                     time: 0
                 });
-            }).on('mouseleave', '.fairy-sku-img', function () {
+            })
+            $(document).off('mouseleave', '.fairy-sku-img').on('mouseleave', '.fairy-sku-img', function () {
                 layer.close(imgLayerIndex);
             })
         }
